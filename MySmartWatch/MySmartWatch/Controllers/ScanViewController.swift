@@ -15,7 +15,7 @@ class ScanViewController: UIViewController {
     
     var queue: DispatchQueue!
     private var centralManager: CBCentralManager!
-    private var scannedPeripherals = BehaviorRelay<[CBPeripheral]>(value: [])
+    private var scannedPeripherals = BehaviorRelay<[HeartRatePeripheral]>(value: [])
     
     var peripheralTableView: UITableView = {
         return UITableView()
@@ -28,18 +28,19 @@ class ScanViewController: UIViewController {
         self.view.addSubview(peripheralTableView)
         let topConstraint = self.peripheralTableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0)
         self.view.addConstraints([topConstraint])
-        peripheralTableView.separatorStyle = .none
         
-        queue = DispatchQueue(label: "CentralManager")
-        centralManager = CBCentralManager(delegate: self, queue: queue, options: nil)
+        peripheralTableView.register(PeripheralViewCell.self, forCellReuseIdentifier: "peripheralViewCell")
+        peripheralTableView.separatorStyle = .none
         
         self.scannedPeripherals.asObservable()
             .bind(to: self.peripheralTableView.rx.items) { (tableView, row, element ) in
-                let cell = UITableViewCell(style: .default, reuseIdentifier: "peripheralCell")
-                cell.textLabel?.text = element.name
-                //TODO: Set rssi and connectable info
+                let cell = self.peripheralTableView.dequeueReusableCell(withIdentifier: "peripheralViewCell", for: IndexPath(row : row, section : 0)) as! PeripheralViewCell
+                cell.customizeCell(name: element.name, rssi: element.rssi, connectable: element.connectable)
                 return cell
             }
+        
+        queue = DispatchQueue(label: "CentralManager")
+        centralManager = CBCentralManager(delegate: self, queue: queue, options: nil)
     }
 }
 
@@ -66,7 +67,7 @@ extension ScanViewController: CBCentralManagerDelegate {
     
     public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         print(RSSI.stringValue)
-        self.scannedPeripherals.add(element: peripheral)
+        self.scannedPeripherals.add(element: HeartRatePeripheral(peripheral: peripheral, advertisementData: advertisementData, rssi: RSSI))
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {

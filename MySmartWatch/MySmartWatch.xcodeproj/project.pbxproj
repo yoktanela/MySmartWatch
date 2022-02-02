@@ -20,6 +20,9 @@
 		54DDDFF027AA8C8800AF7248 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFEF27AA8C8700AF7248 /* ScanViewController.swift */; };
 		54DDDFF427AAA15B00AF7248 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFF327AAA15B00AF7248 /* Constants.swift */; };
 		54DDDFF627AAA29900AF7248 /* BehaviorRelayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFF527AAA29900AF7248 /* BehaviorRelayExtension.swift */; };
+		54DDDFF927AB1E8600AF7248 /* HeartRatePeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFF827AB1E8600AF7248 /* HeartRatePeripheral.swift */; };
+		54DDDFFC27AB1F5F00AF7248 /* PeripheralViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFFB27AB1F5F00AF7248 /* PeripheralViewCell.swift */; };
+		54DDDFFE27AB1F8E00AF7248 /* UIColor+HexValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFFD27AB1F8E00AF7248 /* UIColor+HexValue.swift */; };
 		63AAF31F9084F9ED68FD8883 /* Pods_MySmartWatch_MySmartWatchUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C156F2257671B82A7AAA4E6B /* Pods_MySmartWatch_MySmartWatchUITests.framework */; };
 		F72E79949895871269476CA5 /* Pods_MySmartWatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4015C60A76984EB95EBDAE /* Pods_MySmartWatch.framework */; };
 /* End PBXBuildFile section */
@@ -61,6 +64,9 @@
 		54DDDFEF27AA8C8700AF7248 /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
 		54DDDFF327AAA15B00AF7248 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		54DDDFF527AAA29900AF7248 /* BehaviorRelayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BehaviorRelayExtension.swift; sourceTree = "<group>"; };
+		54DDDFF827AB1E8600AF7248 /* HeartRatePeripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRatePeripheral.swift; sourceTree = "<group>"; };
+		54DDDFFB27AB1F5F00AF7248 /* PeripheralViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralViewCell.swift; sourceTree = "<group>"; };
+		54DDDFFD27AB1F8E00AF7248 /* UIColor+HexValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+HexValue.swift"; sourceTree = "<group>"; };
 		59F72B2846C76CD3814C648D /* Pods-MySmartWatchTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MySmartWatchTests.debug.xcconfig"; path = "Target Support Files/Pods-MySmartWatchTests/Pods-MySmartWatchTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A72D5412BF3C1760F605C5D8 /* Pods-MySmartWatch-MySmartWatchUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MySmartWatch-MySmartWatchUITests.debug.xcconfig"; path = "Target Support Files/Pods-MySmartWatch-MySmartWatchUITests/Pods-MySmartWatch-MySmartWatchUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		B6A0E3863C87AEAD071D62CB /* Pods-MySmartWatch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MySmartWatch.debug.xcconfig"; path = "Target Support Files/Pods-MySmartWatch/Pods-MySmartWatch.debug.xcconfig"; sourceTree = "<group>"; };
@@ -122,6 +128,8 @@
 		54DDDFBE27AA683E00AF7248 /* MySmartWatch */ = {
 			isa = PBXGroup;
 			children = (
+				54DDDFFA27AB1F4B00AF7248 /* Views */,
+				54DDDFF727AB1E5900AF7248 /* Models */,
 				54DDDFF227AAA13600AF7248 /* Helpers */,
 				54DDDFF127AAA12000AF7248 /* Controllers */,
 				54DDDFBF27AA683E00AF7248 /* AppDelegate.swift */,
@@ -165,8 +173,25 @@
 			children = (
 				54DDDFF327AAA15B00AF7248 /* Constants.swift */,
 				54DDDFF527AAA29900AF7248 /* BehaviorRelayExtension.swift */,
+				54DDDFFD27AB1F8E00AF7248 /* UIColor+HexValue.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		54DDDFF727AB1E5900AF7248 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				54DDDFF827AB1E8600AF7248 /* HeartRatePeripheral.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		54DDDFFA27AB1F4B00AF7248 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				54DDDFFB27AB1F5F00AF7248 /* PeripheralViewCell.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		54E6F321D275AE8974CA0A1D /* Frameworks */ = {
@@ -433,6 +458,9 @@
 			files = (
 				54DDDFF427AAA15B00AF7248 /* Constants.swift in Sources */,
 				54DDDFF627AAA29900AF7248 /* BehaviorRelayExtension.swift in Sources */,
+				54DDDFFC27AB1F5F00AF7248 /* PeripheralViewCell.swift in Sources */,
+				54DDDFF927AB1E8600AF7248 /* HeartRatePeripheral.swift in Sources */,
+				54DDDFFE27AB1F8E00AF7248 /* UIColor+HexValue.swift in Sources */,
 				54DDDFC427AA683E00AF7248 /* ViewController.swift in Sources */,
 				54DDDFC027AA683E00AF7248 /* AppDelegate.swift in Sources */,
 				54DDDFC227AA683E00AF7248 /* SceneDelegate.swift in Sources */,
