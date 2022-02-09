@@ -4,6 +4,8 @@
 <dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Bluetooth permission is required to connect the smart watch</string>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
