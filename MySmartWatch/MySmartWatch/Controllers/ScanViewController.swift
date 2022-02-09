@@ -13,11 +13,8 @@ import RxCocoa
 
 class ScanViewController: UIViewController {
     
-    var queue: DispatchQueue!
-    private var centralManager: CBCentralManager!
-    private var scannedPeripherals = BehaviorRelay<[HeartRatePeripheral]>(value: [])
     private var disposeBag = DisposeBag()
-    var timerForScan = Timer()
+    private var scannerViewModel: ScannerViewModel!
     
     var peripheralTableView: UITableView = {
         var tableView = UITableView()
@@ -34,25 +31,24 @@ class ScanViewController: UIViewController {
         return lbl
     }()
     
+    var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+        return indicator
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.scannerViewModel = ScannerViewModel()
+
         self.view.backgroundColor = UIColor.systemBackground
         self.setSubviews()
-        
-        self.scannedPeripherals.asObservable()
-            .bind(to: self.peripheralTableView.rx.items) { (tableView, row, element ) in
-                let cell = self.peripheralTableView.dequeueReusableCell(withIdentifier: "peripheralViewCell", for: IndexPath(row : row, section : 0)) as! PeripheralViewCell
-                cell.customizeCell(name: element.name, rssi: element.rssi, connectable: element.connectable)
-                return cell
-            }
-        
-        // Create CBCentralManager
-        queue = DispatchQueue(label: "CentralManager")
-        centralManager = CBCentralManager(delegate: self, queue: queue, options: nil)
     }
     
     func setSubviews() {
+        
+        self.navigationItem.title = "Available Devices"
+
         self.view.addSubview(explanationLabel)
         explanationLabel.translatesAutoresizingMaskIntoConstraints = false
         let topLblConstariant = explanationLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10.0)
@@ -71,73 +67,38 @@ class ScanViewController: UIViewController {
         peripheralTableView.register(PeripheralViewCell.self, forCellReuseIdentifier: "peripheralViewCell")
         peripheralTableView.separatorStyle = .none
         
-        self.navigationItem.title = "Available Devices"
-        let button = UIBarButtonItem()
-        button.tintColor = UIColor(named: "buttonColor")
-        button.title = "Stop Scan"
-        self.navigationItem.setRightBarButtonItems([button], animated: false)
-        self.navigationItem.rightBarButtonItem?
-            .rx.tap.subscribe(onNext: { _ in
-                if (self.centralManager.isScanning) {
-                    self.centralManager.stopScan()
-                    self.timerForScan.invalidate()
-                    button.title = "Start Scan"
+        activityIndicator.center = self.view.center
+        self.view.addSubview(activityIndicator)
+        
+        self.scannerViewModel
+            .getPeripherals()
+            .observe(on: MainScheduler.instance)
+            .bind(to: self.peripheralTableView.rx.items) { (tableView, row, element ) in
+                let cell = self.peripheralTableView.dequeueReusableCell(withIdentifier: "peripheralViewCell", for: IndexPath(row : row, section : 0)) as! PeripheralViewCell
+                cell.customizeCell(name: element.name, rssi: element.rssi, connectable: element.connectable)
+                return cell
+            }.disposed(by: disposeBag)
+        
+        self.scannerViewModel.noDeviceFound
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { noElement in
+                if noElement {
+                    self.explanationLabel.text = ""
                 } else {
-                    self.startPeriodicScan()
-                    button.title = "Stop Scan"
+                    self.explanationLabel.text = "Select one of the smart watch to connect and monitor your heart rate, steps and sleep quality."
                 }
             }).disposed(by: disposeBag)
         
-        scannedPeripherals.flatMap{ peripherals -> Observable<Bool> in
-            return .just(peripherals.count != 0)
-        }.observe(on: MainScheduler.instance)
-            .subscribe(onNext: { hasElements in
-            if hasElements {
-                self.explanationLabel.text = "Select one of the smart watch to connect and monitor your heart rate, steps and sleep quality."
-            }else {
-                self.explanationLabel.text = ""
-            }
-            }).disposed(by: disposeBag)
-    }
-    
-    func startPeriodicScan() {
-        DispatchQueue.main.async {
-            self.timerForScan = Timer.scheduledTimer(withTimeInterval: TimeInterval(0.1), repeats: true) { _ in
-                self.centralManager.stopScan()
-                self.centralManager.scanForPeripherals(withServices: [CBUUID(string: Constants.heartRatePeripheralServiceUUID)])
-            }
-            self.timerForScan.fire()
-        }
+        
+        let running = Observable.merge(
+            self.scannerViewModel.scanning.asObservable(),
+            self.scannerViewModel.getPeripherals().map { _ in true }
+        )
+        .startWith(true)
+        .asDriver(onErrorJustReturn: false)
+        
+        running
+          .drive(activityIndicator.rx.isAnimating)
+          .disposed(by: disposeBag)
     }
 }
-
-
-extension ScanViewController: CBCentralManagerDelegate {
-    func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        switch central.state {
-        case .unknown:
-            print("unknown")
-        case .resetting:
-            print("resetting")
-        case .unsupported:
-            print("unsupported")
-        case .unauthorized:
-            print("unauthorized")
-        case .poweredOff:
-            print("poweredOff")
-        case .poweredOn:
-            self.startPeriodicScan()
-        @unknown default:
-            print("default")
-        }
-    }
-    
-    public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        print(RSSI.stringValue)
-        self.scannedPeripherals.add(element: HeartRatePeripheral(peripheral: peripheral, advertisementData: advertisementData, rssi: RSSI))
-    }
-    
-    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-    }
-}
-

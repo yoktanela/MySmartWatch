@@ -23,6 +23,7 @@
 		54DDDFF927AB1E8600AF7248 /* HeartRatePeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFF827AB1E8600AF7248 /* HeartRatePeripheral.swift */; };
 		54DDDFFC27AB1F5F00AF7248 /* PeripheralViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFFB27AB1F5F00AF7248 /* PeripheralViewCell.swift */; };
 		54DDDFFE27AB1F8E00AF7248 /* UIColor+HexValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFFD27AB1F8E00AF7248 /* UIColor+HexValue.swift */; };
+		54DDE00527B3D04600AF7248 /* ScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDE00427B3D04600AF7248 /* ScannerViewModel.swift */; };
 		63AAF31F9084F9ED68FD8883 /* Pods_MySmartWatch_MySmartWatchUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C156F2257671B82A7AAA4E6B /* Pods_MySmartWatch_MySmartWatchUITests.framework */; };
 		F72E79949895871269476CA5 /* Pods_MySmartWatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C4015C60A76984EB95EBDAE /* Pods_MySmartWatch.framework */; };
 /* End PBXBuildFile section */
@@ -67,6 +68,7 @@
 		54DDDFF827AB1E8600AF7248 /* HeartRatePeripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRatePeripheral.swift; sourceTree = "<group>"; };
 		54DDDFFB27AB1F5F00AF7248 /* PeripheralViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralViewCell.swift; sourceTree = "<group>"; };
 		54DDDFFD27AB1F8E00AF7248 /* UIColor+HexValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+HexValue.swift"; sourceTree = "<group>"; };
+		54DDE00427B3D04600AF7248 /* ScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerViewModel.swift; sourceTree = "<group>"; };
 		59F72B2846C76CD3814C648D /* Pods-MySmartWatchTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MySmartWatchTests.debug.xcconfig"; path = "Target Support Files/Pods-MySmartWatchTests/Pods-MySmartWatchTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A72D5412BF3C1760F605C5D8 /* Pods-MySmartWatch-MySmartWatchUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MySmartWatch-MySmartWatchUITests.debug.xcconfig"; path = "Target Support Files/Pods-MySmartWatch-MySmartWatchUITests/Pods-MySmartWatch-MySmartWatchUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		B6A0E3863C87AEAD071D62CB /* Pods-MySmartWatch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MySmartWatch.debug.xcconfig"; path = "Target Support Files/Pods-MySmartWatch/Pods-MySmartWatch.debug.xcconfig"; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 		54DDDFBE27AA683E00AF7248 /* MySmartWatch */ = {
 			isa = PBXGroup;
 			children = (
+				54DDE00327B3CFDF00AF7248 /* ViewModels */,
 				54DDDFFA27AB1F4B00AF7248 /* Views */,
 				54DDDFF727AB1E5900AF7248 /* Models */,
 				54DDDFF227AAA13600AF7248 /* Helpers */,
@@ -192,6 +195,14 @@
 				54DDDFFB27AB1F5F00AF7248 /* PeripheralViewCell.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		54DDE00327B3CFDF00AF7248 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				54DDE00427B3D04600AF7248 /* ScannerViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		54E6F321D275AE8974CA0A1D /* Frameworks */ = {
@@ -461,6 +472,7 @@
 				54DDDFFC27AB1F5F00AF7248 /* PeripheralViewCell.swift in Sources */,
 				54DDDFF927AB1E8600AF7248 /* HeartRatePeripheral.swift in Sources */,
 				54DDDFFE27AB1F8E00AF7248 /* UIColor+HexValue.swift in Sources */,
+				54DDE00527B3D04600AF7248 /* ScannerViewModel.swift in Sources */,
 				54DDDFC427AA683E00AF7248 /* ViewController.swift in Sources */,
 				54DDDFC027AA683E00AF7248 /* AppDelegate.swift in Sources */,
 				54DDDFC227AA683E00AF7248 /* SceneDelegate.swift in Sources */,
