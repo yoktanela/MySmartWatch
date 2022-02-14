@@ -92,7 +92,7 @@ class ScanViewController: UIViewController {
         
         let running = Observable.merge(
             self.scannerViewModel.scanning.asObservable(),
-            self.scannerViewModel.getPeripherals().map { _ in true }
+            self.scannerViewModel.getPeripherals().map { _ in false }
         )
         .startWith(true)
         .asDriver(onErrorJustReturn: false)
