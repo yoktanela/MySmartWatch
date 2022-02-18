@@ -239,7 +239,7 @@
 				54DDDFB827AA683E00AF7248 /* Sources */,
 				54DDDFB927AA683E00AF7248 /* Frameworks */,
 				54DDDFBA27AA683E00AF7248 /* Resources */,
-				2D29C1EE883417A009FDCD7F /* [CP] Embed Pods Frameworks */,
+				AC6100E7AA9B24EFD6BF80A2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -277,7 +277,7 @@
 				54DDDFD827AA684200AF7248 /* Sources */,
 				54DDDFD927AA684200AF7248 /* Frameworks */,
 				54DDDFDA27AA684200AF7248 /* Resources */,
-				0F199C3663D06B2D878938F7 /* [CP] Embed Pods Frameworks */,
+				AA3E83079D01C7802E83DEEE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -360,40 +360,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0F199C3663D06B2D878938F7 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MySmartWatch-MySmartWatchUITests/Pods-MySmartWatch-MySmartWatchUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MySmartWatch-MySmartWatchUITests/Pods-MySmartWatch-MySmartWatchUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MySmartWatch-MySmartWatchUITests/Pods-MySmartWatch-MySmartWatchUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2D29C1EE883417A009FDCD7F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MySmartWatch/Pods-MySmartWatch-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MySmartWatch/Pods-MySmartWatch-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MySmartWatch/Pods-MySmartWatch-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		488C5B1C595B7760F8EEA041 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -458,6 +424,40 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AA3E83079D01C7802E83DEEE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MySmartWatch-MySmartWatchUITests/Pods-MySmartWatch-MySmartWatchUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MySmartWatch-MySmartWatchUITests/Pods-MySmartWatch-MySmartWatchUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MySmartWatch-MySmartWatchUITests/Pods-MySmartWatch-MySmartWatchUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AC6100E7AA9B24EFD6BF80A2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MySmartWatch/Pods-MySmartWatch-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MySmartWatch/Pods-MySmartWatch-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MySmartWatch/Pods-MySmartWatch-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -656,7 +656,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5JWMWTC4PQ;
+				DEVELOPMENT_TEAM = KA6X8M94YM;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MySmartWatch/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -686,7 +686,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5JWMWTC4PQ;
+				DEVELOPMENT_TEAM = KA6X8M94YM;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MySmartWatch/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
