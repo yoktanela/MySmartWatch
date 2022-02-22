@@ -32,7 +32,7 @@ class ScanViewController: UIViewController {
     }()
     
     var activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+        let indicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
         return indicator
     }()
     
@@ -43,6 +43,7 @@ class ScanViewController: UIViewController {
 
         self.view.backgroundColor = UIColor.systemBackground
         self.setSubviews()
+        self.bindUI()
     }
     
     func setSubviews() {
@@ -69,7 +70,9 @@ class ScanViewController: UIViewController {
         
         activityIndicator.center = self.view.center
         self.view.addSubview(activityIndicator)
-        
+    }
+    
+    private func bindUI() {
         self.scannerViewModel
             .getPeripherals()
             .observe(on: MainScheduler.instance)
@@ -77,6 +80,15 @@ class ScanViewController: UIViewController {
                 let cell = self.peripheralTableView.dequeueReusableCell(withIdentifier: "peripheralViewCell", for: IndexPath(row : row, section : 0)) as! PeripheralViewCell
                 cell.customizeCell(name: element.name, rssi: element.rssi, connectable: element.connectable)
                 return cell
+            }.disposed(by: disposeBag)
+        
+        self.peripheralTableView.rx
+            .modelSelected(HeartRatePeripheral.self)
+            .observe(on: MainScheduler.instance)
+            .subscribe { HeartRatePeripheral in
+                let tabBarController = MainTabBarController()
+                tabBarController.modalPresentationStyle = .overFullScreen
+                self.navigationController?.setViewControllers([tabBarController], animated: true)
             }.disposed(by: disposeBag)
         
         self.scannerViewModel.noDeviceFound
@@ -88,7 +100,6 @@ class ScanViewController: UIViewController {
                     self.explanationLabel.text = "Select one of the smart watch to connect and monitor your heart rate, steps and sleep quality."
                 }
             }).disposed(by: disposeBag)
-        
         
         let running = Observable.merge(
             self.scannerViewModel.scanning.asObservable(),
