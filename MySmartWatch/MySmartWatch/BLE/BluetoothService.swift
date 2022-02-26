@@ -34,4 +34,12 @@ class BluetoothService {
         self.centralManager.stopScan()
         scanning.accept(false)
     }
+    
+    public func connect(to peripheral: CBPeripheral) -> Observable<Bool> {
+        centralManager.connect(peripheral, options: nil)
+        return centralManager.rx.connectedPeripheral
+            .flatMap { connectedPeripheral -> Observable<Bool> in
+                return .just(connectedPeripheral == peripheral)
+            }
+    }
 }

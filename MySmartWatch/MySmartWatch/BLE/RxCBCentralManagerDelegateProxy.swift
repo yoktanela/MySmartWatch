@@ -51,4 +51,12 @@ public extension Reactive where Base: CBCentralManager {
                 (parameters[0] as! CBCentralManager).state
             }
     }
+    
+    var connectedPeripheral: Observable<CBPeripheral> {
+        delegate.methodInvoked(#selector(CBCentralManagerDelegate
+                                            .centralManager(_:didConnect:)))
+            .map { parameters in
+                return parameters[1] as! CBPeripheral
+            }
+    }
 }
