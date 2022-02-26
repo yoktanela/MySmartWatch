@@ -14,6 +14,7 @@ import RxCocoa
 class ScanViewController: UIViewController {
     
     private var disposeBag = DisposeBag()
+    private var bluetoothService = BluetoothService()
     private var scannerViewModel: ScannerViewModel!
     
     var peripheralTableView: UITableView = {
@@ -39,8 +40,8 @@ class ScanViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.scannerViewModel = ScannerViewModel()
-
+        self.scannerViewModel = ScannerViewModel(bluetoothService: bluetoothService)
+        
         self.view.backgroundColor = UIColor.systemBackground
         self.setSubviews()
         self.bindUI()
@@ -74,7 +75,7 @@ class ScanViewController: UIViewController {
     
     private func bindUI() {
         self.scannerViewModel
-            .getPeripherals()
+            .getPeripherals(for: Constants.heartRatePeripheralServiceUUID)
             .observe(on: MainScheduler.instance)
             .bind(to: self.peripheralTableView.rx.items) { (tableView, row, element ) in
                 let cell = self.peripheralTableView.dequeueReusableCell(withIdentifier: "peripheralViewCell", for: IndexPath(row : row, section : 0)) as! PeripheralViewCell
@@ -85,11 +86,12 @@ class ScanViewController: UIViewController {
         self.peripheralTableView.rx
             .modelSelected(HeartRatePeripheral.self)
             .observe(on: MainScheduler.instance)
-            .subscribe { HeartRatePeripheral in
-                let tabBarController = MainTabBarController()
+            .subscribe(onNext: { heartRatePeripheral in
+                self.scannerViewModel.stopScan()
+                let tabBarController = MainTabBarController(bluetoothService: self.bluetoothService, peripheral: heartRatePeripheral.peripheral)
                 tabBarController.modalPresentationStyle = .overFullScreen
                 self.navigationController?.setViewControllers([tabBarController], animated: true)
-            }.disposed(by: disposeBag)
+            }).disposed(by: disposeBag)
         
         self.scannerViewModel.noDeviceFound
             .observe(on: MainScheduler.instance)
@@ -103,7 +105,7 @@ class ScanViewController: UIViewController {
         
         let running = Observable.merge(
             self.scannerViewModel.scanning.asObservable(),
-            self.scannerViewModel.getPeripherals().map { _ in false }
+            self.scannerViewModel.scannedPeripherals.map { _ in false }
         )
         .startWith(true)
         .asDriver(onErrorJustReturn: false)

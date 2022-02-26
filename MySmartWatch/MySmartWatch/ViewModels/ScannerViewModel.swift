@@ -10,14 +10,11 @@ import CoreBluetooth
 import RxSwift
 import RxCocoa
 
-class ScannerViewModel: NSObject {
+class ScannerViewModel {
     
-    var queue: DispatchQueue = DispatchQueue(label: "CentralManager")
-    private var centralManager: CBCentralManager!
-    private var scannedPeripherals = BehaviorRelay<[HeartRatePeripheral]>(value: [])
+    private var bluetoothService: BluetoothService!
     private var disposeBag = DisposeBag()
-    var timerForScan = Timer()
-    var scanning = BehaviorRelay<Bool>(value: false)
+    var scannedPeripherals = BehaviorRelay<[HeartRatePeripheral]>(value: [])
     
     var noDeviceFound: Observable<Bool> {
         return self.scannedPeripherals
@@ -26,60 +23,27 @@ class ScannerViewModel: NSObject {
             }.asObservable()
     }
     
-    override init() {
-        super.init()
-        
-        centralManager = CBCentralManager(delegate: self, queue: queue, options: nil)
+    var scanning: BehaviorRelay<Bool> {
+        return bluetoothService.scanning
     }
     
-    private func startPeriodicScan() {
-        scanning.accept(true)
-        DispatchQueue.main.async {
-            self.timerForScan = Timer.scheduledTimer(withTimeInterval: TimeInterval(0.1), repeats: true) { _ in
-                self.centralManager.stopScan()
-                self.centralManager.scanForPeripherals(withServices: [CBUUID(string: Constants.heartRatePeripheralServiceUUID)])
-            }
-            self.timerForScan.fire()
-        }
+    init(bluetoothService: BluetoothService) {
+        self.bluetoothService = bluetoothService
     }
     
-    private func stopPeriodicScan() {
-        self.timerForScan.invalidate()
-        self.centralManager.stopScan()
-        scanning.accept(false)
-    }
-    
-    func getPeripherals() -> BehaviorRelay<[HeartRatePeripheral]> {
+    func getPeripherals(for uuidString: String) -> BehaviorRelay<[HeartRatePeripheral]> {
+        bluetoothService.startScanning(for: uuidString)
+            .observe(on: MainScheduler.instance)
+            .flatMap{ peripheral -> Observable<HeartRatePeripheral> in
+                return .just(HeartRatePeripheral(peripheral))
+            }.subscribe( onNext: { heartRatePeripheral in
+                self.scannedPeripherals.add(element: heartRatePeripheral)
+            })
+            .disposed(by: disposeBag)
         return self.scannedPeripherals
     }
-}
-
-extension ScannerViewModel: CBCentralManagerDelegate {
-    func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        switch central.state {
-        case .unknown:
-            print("unknown")
-        case .resetting:
-            print("resetting")
-        case .unsupported:
-            print("unsupported")
-        case .unauthorized:
-            print("unauthorized")
-        case .poweredOff:
-            print("poweredOff")
-        case .poweredOn:
-            self.startPeriodicScan()
-        @unknown default:
-            print("default")
-        }
-    }
     
-    public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        self.scannedPeripherals.add(element: HeartRatePeripheral(peripheral: peripheral, advertisementData: advertisementData, rssi: RSSI))
-    }
-    
-    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+    public func stopScan() {
+        self.bluetoothService.stopScan()
     }
 }
-
-

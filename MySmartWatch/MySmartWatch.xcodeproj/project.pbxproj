@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		457D17C80364F04274A7DCCF /* Pods_MySmartWatchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4576F264734033CA57D6BEDC /* Pods_MySmartWatchTests.framework */; };
 		540AEC3F27C506DB00EC3851 /* UITabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540AEC3E27C506DB00EC3851 /* UITabBar.swift */; };
+		540AEC4127C530B700EC3851 /* PeripheralViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540AEC4027C530B700EC3851 /* PeripheralViewModel.swift */; };
+		540AEC4527C98A5300EC3851 /* BluetoothService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540AEC4427C98A5300EC3851 /* BluetoothService.swift */; };
+		540AEC4827C99C4400EC3851 /* RxCBCentralManagerDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540AEC4727C99C4400EC3851 /* RxCBCentralManagerDelegateProxy.swift */; };
+		540AEC4A27C99C5E00EC3851 /* Peripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540AEC4927C99C5E00EC3851 /* Peripheral.swift */; };
 		54DDDFC027AA683E00AF7248 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFBF27AA683E00AF7248 /* AppDelegate.swift */; };
 		54DDDFC227AA683E00AF7248 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFC127AA683E00AF7248 /* SceneDelegate.swift */; };
 		54DDDFC427AA683E00AF7248 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFC327AA683E00AF7248 /* ViewController.swift */; };
@@ -53,6 +57,10 @@
 		2C4015C60A76984EB95EBDAE /* Pods_MySmartWatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MySmartWatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4576F264734033CA57D6BEDC /* Pods_MySmartWatchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MySmartWatchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		540AEC3E27C506DB00EC3851 /* UITabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITabBar.swift; sourceTree = "<group>"; };
+		540AEC4027C530B700EC3851 /* PeripheralViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralViewModel.swift; sourceTree = "<group>"; };
+		540AEC4427C98A5300EC3851 /* BluetoothService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothService.swift; sourceTree = "<group>"; };
+		540AEC4727C99C4400EC3851 /* RxCBCentralManagerDelegateProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxCBCentralManagerDelegateProxy.swift; sourceTree = "<group>"; };
+		540AEC4927C99C5E00EC3851 /* Peripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peripheral.swift; sourceTree = "<group>"; };
 		54DDDFBC27AA683E00AF7248 /* MySmartWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MySmartWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54DDDFBF27AA683E00AF7248 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54DDDFC127AA683E00AF7248 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +119,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		540AEC4627C99C2C00EC3851 /* BLE */ = {
+			isa = PBXGroup;
+			children = (
+				540AEC4427C98A5300EC3851 /* BluetoothService.swift */,
+				540AEC4727C99C4400EC3851 /* RxCBCentralManagerDelegateProxy.swift */,
+			);
+			path = BLE;
+			sourceTree = "<group>";
+		};
 		54DDDFB327AA683E00AF7248 = {
 			isa = PBXGroup;
 			children = (
@@ -136,6 +153,7 @@
 		54DDDFBE27AA683E00AF7248 /* MySmartWatch */ = {
 			isa = PBXGroup;
 			children = (
+				540AEC4627C99C2C00EC3851 /* BLE */,
 				54DDE00327B3CFDF00AF7248 /* ViewModels */,
 				54DDDFFA27AB1F4B00AF7248 /* Views */,
 				54DDDFF727AB1E5900AF7248 /* Models */,
@@ -194,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				54DDDFF827AB1E8600AF7248 /* HeartRatePeripheral.swift */,
+				540AEC4927C99C5E00EC3851 /* Peripheral.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -210,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				54DDE00427B3D04600AF7248 /* ScannerViewModel.swift */,
+				540AEC4027C530B700EC3851 /* PeripheralViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -476,11 +496,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				540AEC4827C99C4400EC3851 /* RxCBCentralManagerDelegateProxy.swift in Sources */,
+				540AEC4127C530B700EC3851 /* PeripheralViewModel.swift in Sources */,
 				540AEC3F27C506DB00EC3851 /* UITabBar.swift in Sources */,
 				54DDDFF427AAA15B00AF7248 /* Constants.swift in Sources */,
 				54DDDFF627AAA29900AF7248 /* BehaviorRelayExtension.swift in Sources */,
+				540AEC4527C98A5300EC3851 /* BluetoothService.swift in Sources */,
 				54DDDFFC27AB1F5F00AF7248 /* PeripheralViewCell.swift in Sources */,
 				54EDFA0827C00D480017FB6E /* HeartRateViewController.swift in Sources */,
+				540AEC4A27C99C5E00EC3851 /* Peripheral.swift in Sources */,
 				54DDDFF927AB1E8600AF7248 /* HeartRatePeripheral.swift in Sources */,
 				54DDDFFE27AB1F8E00AF7248 /* UIColor+HexValue.swift in Sources */,
 				54DDE00527B3D04600AF7248 /* ScannerViewModel.swift in Sources */,
