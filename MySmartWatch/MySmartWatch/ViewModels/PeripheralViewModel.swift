@@ -30,7 +30,10 @@ class PeripheralViewModel: NSObject {
         
         connected.subscribe(onNext: { value in
             if (value) {
-                // read and notify values
+                // Notify for primary service
+                bluetoothService.setNotify(for: peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID)
+                // Notify for heart rate service
+                bluetoothService.setNotify(for: peripheral, serviceUUID: Constants.heartRatePeripheralServiceUUID, characteristicUUID: Constants.heartRateCharacteristicUUID)
             } else {
                 // try to connect again
             }

@@ -13,6 +13,9 @@
 		540AEC4527C98A5300EC3851 /* BluetoothService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540AEC4427C98A5300EC3851 /* BluetoothService.swift */; };
 		540AEC4827C99C4400EC3851 /* RxCBCentralManagerDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540AEC4727C99C4400EC3851 /* RxCBCentralManagerDelegateProxy.swift */; };
 		540AEC4A27C99C5E00EC3851 /* Peripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 540AEC4927C99C5E00EC3851 /* Peripheral.swift */; };
+		5489F8EB27D2BF4900DC019D /* RxCBPeripheralDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8EA27D2BF4900DC019D /* RxCBPeripheralDelegateProxy.swift */; };
+		5489F8ED27D77C4100DC019D /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8EC27D77C4100DC019D /* StringExtension.swift */; };
+		5489F8EF27D77CA600DC019D /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8EE27D77CA600DC019D /* DataExtension.swift */; };
 		54DDDFC027AA683E00AF7248 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFBF27AA683E00AF7248 /* AppDelegate.swift */; };
 		54DDDFC227AA683E00AF7248 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFC127AA683E00AF7248 /* SceneDelegate.swift */; };
 		54DDDFC427AA683E00AF7248 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFC327AA683E00AF7248 /* ViewController.swift */; };
@@ -61,6 +64,9 @@
 		540AEC4427C98A5300EC3851 /* BluetoothService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothService.swift; sourceTree = "<group>"; };
 		540AEC4727C99C4400EC3851 /* RxCBCentralManagerDelegateProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxCBCentralManagerDelegateProxy.swift; sourceTree = "<group>"; };
 		540AEC4927C99C5E00EC3851 /* Peripheral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peripheral.swift; sourceTree = "<group>"; };
+		5489F8EA27D2BF4900DC019D /* RxCBPeripheralDelegateProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxCBPeripheralDelegateProxy.swift; sourceTree = "<group>"; };
+		5489F8EC27D77C4100DC019D /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		5489F8EE27D77CA600DC019D /* DataExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtension.swift; sourceTree = "<group>"; };
 		54DDDFBC27AA683E00AF7248 /* MySmartWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MySmartWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54DDDFBF27AA683E00AF7248 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54DDDFC127AA683E00AF7248 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +130,7 @@
 			children = (
 				540AEC4427C98A5300EC3851 /* BluetoothService.swift */,
 				540AEC4727C99C4400EC3851 /* RxCBCentralManagerDelegateProxy.swift */,
+				5489F8EA27D2BF4900DC019D /* RxCBPeripheralDelegateProxy.swift */,
 			);
 			path = BLE;
 			sourceTree = "<group>";
@@ -204,6 +211,8 @@
 				54DDDFF527AAA29900AF7248 /* BehaviorRelayExtension.swift */,
 				54DDDFFD27AB1F8E00AF7248 /* UIColor+HexValue.swift */,
 				540AEC3E27C506DB00EC3851 /* UITabBar.swift */,
+				5489F8EC27D77C4100DC019D /* StringExtension.swift */,
+				5489F8EE27D77CA600DC019D /* DataExtension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -505,12 +514,15 @@
 				54DDDFFC27AB1F5F00AF7248 /* PeripheralViewCell.swift in Sources */,
 				54EDFA0827C00D480017FB6E /* HeartRateViewController.swift in Sources */,
 				540AEC4A27C99C5E00EC3851 /* Peripheral.swift in Sources */,
+				5489F8EF27D77CA600DC019D /* DataExtension.swift in Sources */,
 				54DDDFF927AB1E8600AF7248 /* HeartRatePeripheral.swift in Sources */,
 				54DDDFFE27AB1F8E00AF7248 /* UIColor+HexValue.swift in Sources */,
 				54DDE00527B3D04600AF7248 /* ScannerViewModel.swift in Sources */,
+				5489F8EB27D2BF4900DC019D /* RxCBPeripheralDelegateProxy.swift in Sources */,
 				54EDFA0627BFFED30017FB6E /* MainTabViewController.swift in Sources */,
 				54DDDFC427AA683E00AF7248 /* ViewController.swift in Sources */,
 				54DDDFC027AA683E00AF7248 /* AppDelegate.swift in Sources */,
+				5489F8ED27D77C4100DC019D /* StringExtension.swift in Sources */,
 				54DDDFC227AA683E00AF7248 /* SceneDelegate.swift in Sources */,
 				54DDDFF027AA8C8800AF7248 /* ScanViewController.swift in Sources */,
 			);
@@ -692,7 +704,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KA6X8M94YM;
+				DEVELOPMENT_TEAM = 5JWMWTC4PQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MySmartWatch/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -722,7 +734,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KA6X8M94YM;
+				DEVELOPMENT_TEAM = 5JWMWTC4PQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MySmartWatch/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

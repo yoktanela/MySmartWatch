@@ -42,4 +42,42 @@ class BluetoothService {
                 return .just(connectedPeripheral == peripheral)
             }
     }
+    
+    public func setNotify(for peripheral: CBPeripheral, serviceUUID: String, characteristicUUID: String) {
+        let serviceObs = peripheral.rx.didDiscoverServices
+            .flatMap{ services -> Observable<CBService?> in
+                return .just(services.first(where: { $0.uuid.uuidString
+                        .isEqual(to: serviceUUID)
+                }))
+            }
+        
+        let charObs = peripheral.rx.didDiscoverCharacteristics
+            .flatMap { characteristics -> Observable<CBCharacteristic?> in
+                return .just(characteristics.first(where: { $0.uuid.uuidString
+                    .isEqual(to: characteristicUUID)
+                }))
+            }
+        
+        serviceObs.subscribe( onNext: { service in
+            if let service = service {
+                print("FIND service")
+                peripheral.discoverCharacteristics([CBUUID(string: characteristicUUID)], for: service)
+            }
+        }).disposed(by: disposeBag)
+        
+        charObs.subscribe( onNext: { characteristic in
+            if let characteristic = characteristic {
+                print("FIND char")
+                peripheral.setNotifyValue(true, for: characteristic)
+            }
+        }).disposed(by: disposeBag)
+        
+        peripheral.rx.didUpdateValue
+            .subscribe(onNext: { data in
+                print("FIND value")
+                print(data?.hexEncodedString())
+            }).disposed(by: disposeBag)
+        
+        peripheral.discoverServices([CBUUID(string: serviceUUID)])
+    }
 }
