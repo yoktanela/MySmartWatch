@@ -24,6 +24,11 @@ class HeartRateViewController: UIViewController {
         lbl.numberOfLines = 0
         return lbl
     }()
+    
+    var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
+        return indicator
+    }()
 
     init(bluetoothService: BluetoothService, peripheral: CBPeripheral) {
         self.peripheralViewModel = PeripheralViewModel(bluetoothService: bluetoothService, peripheral: peripheral)
@@ -45,28 +50,34 @@ class HeartRateViewController: UIViewController {
         let rightLblConstraint = heartRateLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -20.0)
         self.view.addConstraints([topLblConstariant, leftLblConstraint, rightLblConstraint])
         
+        self.view.addSubview(activityIndicator)
+        let centerX = activityIndicator.centerXAnchor.constraint(equalTo: self.activityIndicator.centerXAnchor)
+        let centerY = activityIndicator.centerYAnchor.constraint(equalTo: self.activityIndicator.centerYAnchor)
+        self.view.addConstraints([centerX, centerY])
+        
         self.bindUI()
     }
     
     func bindUI() {
-        peripheralViewModel?.connected
-            .subscribe(onNext: { value in
-                if value {
-                    // remove indicator
-                } else {
-                    //empty state
-                }
-            }).disposed(by: disposeBag)
         
-        let heartRateStr = peripheralViewModel?.heartRate
+        peripheralViewModel?.heartRate
+            .flatMap { rate -> Observable<Bool> in
+                if let _ = rate {
+                    return .just(false)
+                }
+                return .just(true)
+            }.asDriver(onErrorJustReturn: true)
+            .drive(activityIndicator.rx.isAnimating)
+            .disposed(by: disposeBag)
+        
+        peripheralViewModel?.heartRate
             .flatMap { rate -> Observable<String> in
                 if let rate = rate {
                     return .just(String(rate))
                 }
                 return .just("")
             }.asDriver(onErrorJustReturn: "")
-        
-        heartRateStr?.drive(heartRateLabel.rx.text)
+            .drive(heartRateLabel.rx.text)
             .disposed(by: disposeBag)
     }
 }
