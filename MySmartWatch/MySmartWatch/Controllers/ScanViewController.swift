@@ -99,7 +99,7 @@ class ScanViewController: UIViewController {
                 if noElement {
                     self.explanationLabel.text = ""
                 } else {
-                    self.explanationLabel.text = "Select one of the smart watch to connect and monitor your heart rate, steps and sleep quality."
+                    self.explanationLabel.text = "Select one of the smart watches to connect and monitor your heart rate, steps and sleep quality."
                 }
             }).disposed(by: disposeBag)
         
