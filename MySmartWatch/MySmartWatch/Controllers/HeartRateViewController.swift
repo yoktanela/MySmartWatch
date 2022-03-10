@@ -29,6 +29,13 @@ class HeartRateViewController: UIViewController {
         let indicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
         return indicator
     }()
+    
+    var pulseImg: UIImageView = {
+            let imgView = UIImageView()
+            imgView.image = UIImage(named: "pulseImg")
+            imgView.layer.opacity = 0.5
+            return imgView
+        }()
 
     init(bluetoothService: BluetoothService, peripheral: CBPeripheral) {
         self.peripheralViewModel = PeripheralViewModel(bluetoothService: bluetoothService, peripheral: peripheral)
@@ -51,9 +58,18 @@ class HeartRateViewController: UIViewController {
         self.view.addConstraints([topLblConstariant, leftLblConstraint, rightLblConstraint])
         
         self.view.addSubview(activityIndicator)
-        let centerX = activityIndicator.centerXAnchor.constraint(equalTo: self.activityIndicator.centerXAnchor)
-        let centerY = activityIndicator.centerYAnchor.constraint(equalTo: self.activityIndicator.centerYAnchor)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        let centerX = activityIndicator.centerXAnchor.constraint(equalTo: self.heartRateLabel.centerXAnchor)
+        let centerY = activityIndicator.centerYAnchor.constraint(equalTo: self.heartRateLabel.centerYAnchor)
         self.view.addConstraints([centerX, centerY])
+        
+        self.view.addSubview(pulseImg)
+                pulseImg.translatesAutoresizingMaskIntoConstraints = false
+                let topImgConstariant = pulseImg.topAnchor.constraint(equalTo: self.activityIndicator.bottomAnchor, constant: 20.0)
+                let widthImgConstraint = pulseImg.widthAnchor.constraint(equalTo: pulseImg.heightAnchor)
+                let heightImgConstraint = pulseImg.heightAnchor.constraint(equalToConstant: 50.0)
+                let centerXImg = pulseImg.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+                self.view.addConstraints([topImgConstariant, widthImgConstraint, heightImgConstraint, centerXImg])
         
         self.bindUI()
     }
