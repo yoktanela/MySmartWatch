@@ -14,6 +14,7 @@ import RxCocoa
 class ScanViewController: UIViewController {
     
     private var disposeBag = DisposeBag()
+    private var bluetoothService = BluetoothService()
     private var scannerViewModel: ScannerViewModel!
     
     var peripheralTableView: UITableView = {
@@ -32,17 +33,18 @@ class ScanViewController: UIViewController {
     }()
     
     var activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+        let indicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
         return indicator
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.scannerViewModel = ScannerViewModel()
-
+        self.scannerViewModel = ScannerViewModel(bluetoothService: bluetoothService)
+        
         self.view.backgroundColor = UIColor.systemBackground
         self.setSubviews()
+        self.bindUI()
     }
     
     func setSubviews() {
@@ -69,9 +71,11 @@ class ScanViewController: UIViewController {
         
         activityIndicator.center = self.view.center
         self.view.addSubview(activityIndicator)
-        
+    }
+    
+    private func bindUI() {
         self.scannerViewModel
-            .getPeripherals()
+            .getPeripherals(for: Constants.heartRatePeripheralServiceUUID)
             .observe(on: MainScheduler.instance)
             .bind(to: self.peripheralTableView.rx.items) { (tableView, row, element ) in
                 let cell = self.peripheralTableView.dequeueReusableCell(withIdentifier: "peripheralViewCell", for: IndexPath(row : row, section : 0)) as! PeripheralViewCell
@@ -79,20 +83,29 @@ class ScanViewController: UIViewController {
                 return cell
             }.disposed(by: disposeBag)
         
+        self.peripheralTableView.rx
+            .modelSelected(HeartRatePeripheral.self)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { heartRatePeripheral in
+                self.scannerViewModel.stopScan()
+                let tabBarController = MainTabBarController(bluetoothService: self.bluetoothService, peripheral: heartRatePeripheral.peripheral)
+                tabBarController.modalPresentationStyle = .overFullScreen
+                self.navigationController?.setViewControllers([tabBarController], animated: true)
+            }).disposed(by: disposeBag)
+        
         self.scannerViewModel.noDeviceFound
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { noElement in
                 if noElement {
                     self.explanationLabel.text = ""
                 } else {
-                    self.explanationLabel.text = "Select one of the smart watch to connect and monitor your heart rate, steps and sleep quality."
+                    self.explanationLabel.text = "Select one of the smart watches to connect and monitor your heart rate, steps and sleep quality."
                 }
             }).disposed(by: disposeBag)
         
-        
         let running = Observable.merge(
             self.scannerViewModel.scanning.asObservable(),
-            self.scannerViewModel.getPeripherals().map { _ in false }
+            self.scannerViewModel.scannedPeripherals.map { _ in false }
         )
         .startWith(true)
         .asDriver(onErrorJustReturn: false)

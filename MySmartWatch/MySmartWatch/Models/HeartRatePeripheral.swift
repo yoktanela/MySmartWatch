@@ -15,11 +15,11 @@ class HeartRatePeripheral: Equatable {
     var rssi: NSNumber?
     var connectable: Bool = false
     
-    init(peripheral: CBPeripheral, advertisementData: [String: Any], rssi: NSNumber?) {
-        self.peripheral = peripheral
-        self.name = advertisementData["kCBAdvDataLocalName"] as? String
-        self.connectable = advertisementData["kCBAdvDataIsConnectable"] as? Bool ?? false
-        self.rssi = rssi
+    init(_ peripheral: Peripheral) {
+        self.peripheral = peripheral.peripheral
+        self.name = peripheral.advertisementData["kCBAdvDataLocalName"] as? String
+        self.connectable = peripheral.advertisementData["kCBAdvDataIsConnectable"] as? Bool ?? false
+        self.rssi = peripheral.rssi
     }
     
     static func == (lhs: HeartRatePeripheral, rhs: HeartRatePeripheral) -> Bool {
