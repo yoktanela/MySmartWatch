@@ -16,6 +16,7 @@
 		5489F8EB27D2BF4900DC019D /* RxCBPeripheralDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8EA27D2BF4900DC019D /* RxCBPeripheralDelegateProxy.swift */; };
 		5489F8ED27D77C4100DC019D /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8EC27D77C4100DC019D /* StringExtension.swift */; };
 		5489F8EF27D77CA600DC019D /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8EE27D77CA600DC019D /* DataExtension.swift */; };
+		5489F8F327DA334000DC019D /* StepCountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8F227DA334000DC019D /* StepCountViewController.swift */; };
 		54DDDFC027AA683E00AF7248 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFBF27AA683E00AF7248 /* AppDelegate.swift */; };
 		54DDDFC227AA683E00AF7248 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFC127AA683E00AF7248 /* SceneDelegate.swift */; };
 		54DDDFC427AA683E00AF7248 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFC327AA683E00AF7248 /* ViewController.swift */; };
@@ -67,6 +68,7 @@
 		5489F8EA27D2BF4900DC019D /* RxCBPeripheralDelegateProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxCBPeripheralDelegateProxy.swift; sourceTree = "<group>"; };
 		5489F8EC27D77C4100DC019D /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		5489F8EE27D77CA600DC019D /* DataExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtension.swift; sourceTree = "<group>"; };
+		5489F8F227DA334000DC019D /* StepCountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCountViewController.swift; sourceTree = "<group>"; };
 		54DDDFBC27AA683E00AF7248 /* MySmartWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MySmartWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54DDDFBF27AA683E00AF7248 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54DDDFC127AA683E00AF7248 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				54DDDFEF27AA8C8700AF7248 /* ScanViewController.swift */,
 				54EDFA0527BFFED30017FB6E /* MainTabViewController.swift */,
 				54EDFA0727C00D480017FB6E /* HeartRateViewController.swift */,
+				5489F8F227DA334000DC019D /* StepCountViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -506,6 +509,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				540AEC4827C99C4400EC3851 /* RxCBCentralManagerDelegateProxy.swift in Sources */,
+				5489F8F327DA334000DC019D /* StepCountViewController.swift in Sources */,
 				540AEC4127C530B700EC3851 /* PeripheralViewModel.swift in Sources */,
 				540AEC3F27C506DB00EC3851 /* UITabBar.swift in Sources */,
 				54DDDFF427AAA15B00AF7248 /* Constants.swift in Sources */,

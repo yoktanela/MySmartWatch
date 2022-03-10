@@ -34,8 +34,11 @@ class MainTabBarController: UITabBarController {
     
     private func setTabBarItems() {
         let heartRateVC = HeartRateViewController(bluetoothService: self.bluetoothService, peripheral: self.peripheral)
-        let tabBarItem = createTabBarItem(controller: heartRateVC, title: "Heart Rate", image: #imageLiteral(resourceName: "heartRateImg"))
-        self.setViewControllers([tabBarItem], animated: false)
+        let heartRateTabBarItem = createTabBarItem(controller: heartRateVC, title: "Heart Rate", image: #imageLiteral(resourceName: "heartRateImg"))
+        let stepCountVC = StepCountViewController(bluetoothService: self.bluetoothService, peripheral: self.peripheral)
+        let stepCountTabBarItem = createTabBarItem(controller: stepCountVC, title: "Step Count", image: #imageLiteral(resourceName: "stepImg"))
+        
+        self.setViewControllers([heartRateTabBarItem, stepCountTabBarItem], animated: false)
     }
     
     private func createTabBarItem(controller: UIViewController,
