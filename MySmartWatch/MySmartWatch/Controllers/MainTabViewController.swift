@@ -13,12 +13,10 @@ import RxCocoa
 
 class MainTabBarController: UITabBarController {
     
-    private var bluetoothService: BluetoothService!
-    var peripheral: CBPeripheral!
+    var peripheralViewModel: PeripheralViewModel!
 
     init(bluetoothService: BluetoothService, peripheral: CBPeripheral) {
-        self.bluetoothService = bluetoothService
-        self.peripheral = peripheral
+        self.peripheralViewModel = PeripheralViewModel(bluetoothService: bluetoothService, peripheral: peripheral)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -33,9 +31,9 @@ class MainTabBarController: UITabBarController {
     }
     
     private func setTabBarItems() {
-        let heartRateVC = HeartRateViewController(bluetoothService: self.bluetoothService, peripheral: self.peripheral)
+        let heartRateVC = HeartRateViewController(peripheralViewModel: self.peripheralViewModel)
         let heartRateTabBarItem = createTabBarItem(controller: heartRateVC, title: "Heart Rate", image: #imageLiteral(resourceName: "heartRateImg"))
-        let stepCountVC = StepCountViewController(bluetoothService: self.bluetoothService, peripheral: self.peripheral)
+        let stepCountVC = StepCountViewController(peripheralViewModel: self.peripheralViewModel)
         let stepCountTabBarItem = createTabBarItem(controller: stepCountVC, title: "Step Count", image: #imageLiteral(resourceName: "stepImg"))
         
         self.setViewControllers([heartRateTabBarItem, stepCountTabBarItem], animated: false)

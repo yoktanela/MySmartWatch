@@ -67,8 +67,8 @@ class HeartRateViewController: UIViewController {
         return lbl
     }()
 
-    init(bluetoothService: BluetoothService, peripheral: CBPeripheral) {
-        self.peripheralViewModel = PeripheralViewModel(bluetoothService: bluetoothService, peripheral: peripheral)
+    init(peripheralViewModel: PeripheralViewModel) {
+        self.peripheralViewModel = peripheralViewModel
         super.init(nibName: nil, bundle: nil)
     }
     

@@ -22,6 +22,8 @@ class PeripheralViewModel: NSObject {
     var maxHeartRate = BehaviorRelay<Int>(value: 0)
     var averageHeartRate = BehaviorRelay<Int>(value: 0)
     
+    var stepCount = BehaviorRelay<Int?>(value: nil)
+    
     init(bluetoothService: BluetoothService, peripheral: CBPeripheral) {
         super.init()
         self.bluetoothService = bluetoothService
@@ -93,6 +95,26 @@ class PeripheralViewModel: NSObject {
                     return .just(0)
                 }.asDriver(onErrorJustReturn: 0)
                     .drive(self.heartRate)
+                    .disposed(by: self.disposeBag)
+                
+                // Notify for step count characteristic
+                self.bluetoothService.setNotify(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.stepCountCharacteristicUUID).flatMap { data -> Observable<Int?> in
+                    if let data = data {
+                        let str = data.hexEncodedString()
+                        if String(str.prefix(2)).isEqual(to: "00") {
+                            return .just(nil)
+                        }
+                        let start = str.index(str.startIndex, offsetBy: 16)
+                        let end = str.index(start, offsetBy: 8)
+                        let range = start..<end
+                        let mySubstring = String(str[range])
+                        
+                        let step = Int(mySubstring, radix: 16) ?? 0
+                        return .just(step != 0 ? step : 0)
+                    }
+                    return .just(nil)
+                }.asDriver(onErrorJustReturn: nil)
+                    .drive(self.stepCount)
                     .disposed(by: self.disposeBag)
             } else {
                 // try to connect again

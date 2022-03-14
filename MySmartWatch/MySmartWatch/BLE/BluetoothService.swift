@@ -69,6 +69,19 @@ class BluetoothService {
             }
         }).disposed(by: disposeBag)
         
-        return peripheral.rx.didUpdateValue
+        let characteristic = peripheral.rx.didUpdateValue
+            .flatMap { characteristic -> Observable<CBCharacteristic?> in
+                if characteristic.uuid.uuidString.isEqual(to: characteristicUUID) {
+                    return .just(characteristic)
+                }
+                return .just(nil)
+            }
+        
+        let result = characteristic.filter { $0 != nil}
+            .flatMap { characteristic -> Observable<Data?> in
+                return .just(characteristic?.value)
+            }
+        
+        return result
     }
 }
