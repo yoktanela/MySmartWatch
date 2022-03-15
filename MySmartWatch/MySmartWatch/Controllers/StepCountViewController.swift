@@ -30,6 +30,13 @@ class StepCountViewController: UIViewController {
         return indicator
     }()
     
+    var stepImg: UIImageView = {
+            let imgView = UIImageView()
+            imgView.image = UIImage(named: "footImg")
+            imgView.layer.opacity = 0.5
+            return imgView
+        }()
+    
     init(peripheralViewModel: PeripheralViewModel) {
         self.peripheralViewModel = peripheralViewModel
         super.init(nibName: nil, bundle: nil)
@@ -60,28 +67,35 @@ class StepCountViewController: UIViewController {
         let centerX = activityIndicator.centerXAnchor.constraint(equalTo: self.stepCountLabel.centerXAnchor)
         let centerY = activityIndicator.centerYAnchor.constraint(equalTo: self.stepCountLabel.centerYAnchor)
         self.view.addConstraints([centerX, centerY])
+        
+        self.view.addSubview(stepImg)
+        stepImg.translatesAutoresizingMaskIntoConstraints = false
+        let topImgConstariant = stepImg.topAnchor.constraint(equalTo: self.activityIndicator.bottomAnchor, constant: 20.0)
+        let widthImgConstraint = stepImg.widthAnchor.constraint(equalTo: stepImg.heightAnchor)
+        let heightImgConstraint = stepImg.heightAnchor.constraint(equalToConstant: 50.0)
+        let centerXImg = stepImg.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+        self.view.addConstraints([topImgConstariant, widthImgConstraint, heightImgConstraint, centerXImg])
     }
     
     func bindUI() {
         
+        let running = BehaviorRelay<Bool>(value: true)
         peripheralViewModel?.stepCount
             .compactMap {$0}
             .flatMap { step -> Observable<Bool> in
-                if step != 0 {
-                    return .just(false)
-                }
-                return .just(true)
+                return .just(false)
             }.asDriver(onErrorJustReturn: true)
-            .drive(activityIndicator.rx.isAnimating)
+            .drive(running)
+            .disposed(by: disposeBag)
+        
+        running.asDriver()
+            .drive(self.activityIndicator.rx.isAnimating)
             .disposed(by: disposeBag)
         
         peripheralViewModel?.stepCount
             .compactMap {$0}
             .flatMap { step -> Observable<String> in
-                if step != 0 {
-                    return .just(String(step))
-                }
-                return .just("")
+                return .just(String(step))
             }.asDriver(onErrorJustReturn: "")
             .drive(stepCountLabel.rx.text)
             .disposed(by: disposeBag)
