@@ -89,13 +89,6 @@ class PeripheralViewModel: NSObject {
                 // Notify for primary service
                 self.bluetoothService.setNotify(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID)
                 
-                // Set initial features
-                self.bluetoothService.writeValue(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID, data: "BE0609FB01".toData())
-                                  
-                self.bluetoothService.writeValue(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID, data: "BE0203ED".toData())
-                
-                self.bluetoothService.writeValue(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID, data: "BE0205ED".toData())
-                                 
                 // Notify for heart rate service
                 self.bluetoothService.setNotify(for: self.peripheral, serviceUUID: Constants.heartRatePeripheralServiceUUID, characteristicUUID: Constants.heartRateCharacteristicUUID).flatMap { data -> Observable<Int> in
                     if let data = data {
@@ -107,6 +100,13 @@ class PeripheralViewModel: NSObject {
                 }.asDriver(onErrorJustReturn: 0)
                     .drive(self.heartRate)
                     .disposed(by: self.disposeBag)
+                
+                // Set initial features
+                self.bluetoothService.writeValue(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID, data: "BE0609FB01".toData())
+                                  
+                self.bluetoothService.writeValue(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID, data: "BE0203ED".toData())
+                
+                self.bluetoothService.writeValue(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID, data: "BE0205ED".toData())
                 
                 // Notify for step count characteristic
                 let dataObs = self.bluetoothService.setNotify(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.stepCountCharacteristicUUID).compactMap{$0}

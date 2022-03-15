@@ -16,26 +16,15 @@ class HeartRateViewController: UIViewController {
     var peripheralViewModel: PeripheralViewModel?
     private var disposeBag = DisposeBag()
     
-    var heartRateLabel: UILabel = {
-        let lbl = UILabel()
-        lbl.textColor = UIColor(named: "textColor")
-        lbl.font = UIFont.systemFont(ofSize: 50, weight: .light)
-        lbl.textAlignment = .center
-        lbl.numberOfLines = 0
-        return lbl
+    var heartRateView: CounterDisplayView = {
+        let view = CounterDisplayView(imageName: "pulseImg")
+        return view
     }()
     
     var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
         return indicator
     }()
-    
-    var pulseImg: UIImageView = {
-            let imgView = UIImageView()
-            imgView.image = UIImage(named: "pulseImg")
-            imgView.layer.opacity = 0.5
-            return imgView
-        }()
     
     var minLabel: UILabel = {
         let lbl = UILabel()
@@ -85,40 +74,32 @@ class HeartRateViewController: UIViewController {
     }
     
     func setSubviews() {
-        self.view.addSubview(heartRateLabel)
-        heartRateLabel.translatesAutoresizingMaskIntoConstraints = false
-        let topLblConstariant = heartRateLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 50.0)
-        let leftLblConstraint = heartRateLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20.0)
-        let rightLblConstraint = heartRateLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -20.0)
+        self.view.addSubview(heartRateView)
+        heartRateView.translatesAutoresizingMaskIntoConstraints = false
+        let topLblConstariant = heartRateView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 50.0)
+        let leftLblConstraint = heartRateView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20.0)
+        let rightLblConstraint = heartRateView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -20.0)
         self.view.addConstraints([topLblConstariant, leftLblConstraint, rightLblConstraint])
         
         self.view.addSubview(activityIndicator)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        let centerX = activityIndicator.centerXAnchor.constraint(equalTo: self.heartRateLabel.centerXAnchor)
-        let centerY = activityIndicator.centerYAnchor.constraint(equalTo: self.heartRateLabel.centerYAnchor)
+        let centerX = activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+        let centerY = activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
         self.view.addConstraints([centerX, centerY])
-        
-        self.view.addSubview(pulseImg)
-        pulseImg.translatesAutoresizingMaskIntoConstraints = false
-        let topImgConstariant = pulseImg.topAnchor.constraint(equalTo: self.activityIndicator.bottomAnchor, constant: 20.0)
-        let widthImgConstraint = pulseImg.widthAnchor.constraint(equalTo: pulseImg.heightAnchor)
-        let heightImgConstraint = pulseImg.heightAnchor.constraint(equalToConstant: 50.0)
-        let centerXImg = pulseImg.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
-        self.view.addConstraints([topImgConstariant, widthImgConstraint, heightImgConstraint, centerXImg])
         
         self.view.addSubview(minLabel)
         minLabel.translatesAutoresizingMaskIntoConstraints = false
-        let minTop = minLabel.topAnchor.constraint(equalTo: self.pulseImg.bottomAnchor, constant: 50.0)
+        let minTop = minLabel.topAnchor.constraint(equalTo: self.heartRateView.bottomAnchor, constant: 50.0)
         let minLeft = minLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20.0)
         
         self.view.addSubview(maxLabel)
         maxLabel.translatesAutoresizingMaskIntoConstraints = false
-        let maxTop = maxLabel.topAnchor.constraint(equalTo: self.pulseImg.bottomAnchor, constant: 50.0)
+        let maxTop = maxLabel.topAnchor.constraint(equalTo: self.heartRateView.bottomAnchor, constant: 50.0)
         let maxRight = maxLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -20.0)
         
         self.view.addSubview(averageLabel)
         averageLabel.translatesAutoresizingMaskIntoConstraints = false
-        let averageTop = averageLabel.topAnchor.constraint(equalTo: self.pulseImg.bottomAnchor, constant: 50.0)
+        let averageTop = averageLabel.topAnchor.constraint(equalTo: self.heartRateView.bottomAnchor, constant: 50.0)
         let averageCenterX = averageLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
         
         self.view.addConstraints([minTop, minLeft, maxTop, maxRight, averageTop, averageCenterX])
@@ -141,9 +122,9 @@ class HeartRateViewController: UIViewController {
                 if rate != 0 {
                     return .just(String(rate))
                 }
-                return .just("")
-            }.asDriver(onErrorJustReturn: "")
-            .drive(heartRateLabel.rx.text)
+                return .just("-")
+            }.asDriver(onErrorJustReturn: "-")
+            .drive(heartRateView.rx.value)
             .disposed(by: disposeBag)
         
         peripheralViewModel?.minHeartRate

@@ -17,6 +17,7 @@
 		5489F8ED27D77C4100DC019D /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8EC27D77C4100DC019D /* StringExtension.swift */; };
 		5489F8EF27D77CA600DC019D /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8EE27D77CA600DC019D /* DataExtension.swift */; };
 		5489F8F327DA334000DC019D /* StepCountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8F227DA334000DC019D /* StepCountViewController.swift */; };
+		5489F8F527E138F100DC019D /* CounterDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8F427E138F100DC019D /* CounterDisplayView.swift */; };
 		54DDDFC027AA683E00AF7248 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFBF27AA683E00AF7248 /* AppDelegate.swift */; };
 		54DDDFC227AA683E00AF7248 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFC127AA683E00AF7248 /* SceneDelegate.swift */; };
 		54DDDFC427AA683E00AF7248 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFC327AA683E00AF7248 /* ViewController.swift */; };
@@ -69,6 +70,7 @@
 		5489F8EC27D77C4100DC019D /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		5489F8EE27D77CA600DC019D /* DataExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtension.swift; sourceTree = "<group>"; };
 		5489F8F227DA334000DC019D /* StepCountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCountViewController.swift; sourceTree = "<group>"; };
+		5489F8F427E138F100DC019D /* CounterDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterDisplayView.swift; sourceTree = "<group>"; };
 		54DDDFBC27AA683E00AF7248 /* MySmartWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MySmartWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54DDDFBF27AA683E00AF7248 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54DDDFC127AA683E00AF7248 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				54DDDFFB27AB1F5F00AF7248 /* PeripheralViewCell.swift */,
+				5489F8F427E138F100DC019D /* CounterDisplayView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -516,6 +519,7 @@
 				54DDDFF627AAA29900AF7248 /* BehaviorRelayExtension.swift in Sources */,
 				540AEC4527C98A5300EC3851 /* BluetoothService.swift in Sources */,
 				54DDDFFC27AB1F5F00AF7248 /* PeripheralViewCell.swift in Sources */,
+				5489F8F527E138F100DC019D /* CounterDisplayView.swift in Sources */,
 				54EDFA0827C00D480017FB6E /* HeartRateViewController.swift in Sources */,
 				540AEC4A27C99C5E00EC3851 /* Peripheral.swift in Sources */,
 				5489F8EF27D77CA600DC019D /* DataExtension.swift in Sources */,
