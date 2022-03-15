@@ -23,6 +23,9 @@ class PeripheralViewModel: NSObject {
     var averageHeartRate = BehaviorRelay<Int>(value: 0)
     
     var stepCount = BehaviorRelay<Int?>(value: nil)
+    var calorie = BehaviorRelay<Int?>(value: nil)
+    var distance = BehaviorRelay<Double?>(value: nil)
+    var battery = BehaviorRelay<Int?>(value: nil)
     
     init(bluetoothService: BluetoothService, peripheral: CBPeripheral) {
         super.init()
@@ -98,12 +101,14 @@ class PeripheralViewModel: NSObject {
                     .disposed(by: self.disposeBag)
                 
                 // Notify for step count characteristic
-                self.bluetoothService.setNotify(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.stepCountCharacteristicUUID).flatMap { data -> Observable<Int?> in
-                    if let data = data {
+                let dataObs = self.bluetoothService.setNotify(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.stepCountCharacteristicUUID).compactMap{$0}
+                let stepInfo = dataObs
+                    .filter {String($0.hexEncodedString().prefix(2)).isEqual(to: "DE")}
+                let deviceInfo = dataObs
+                    .filter {String($0.hexEncodedString().prefix(2)).isEqual(to: "00")}
+                    
+                stepInfo.flatMap { data -> Observable<Int?> in
                         let str = data.hexEncodedString()
-                        if String(str.prefix(2)).isEqual(to: "00") {
-                            return .just(nil)
-                        }
                         let start = str.index(str.startIndex, offsetBy: 16)
                         let end = str.index(start, offsetBy: 8)
                         let range = start..<end
@@ -111,11 +116,49 @@ class PeripheralViewModel: NSObject {
                         
                         let step = Int(mySubstring, radix: 16) ?? 0
                         return .just(step != 0 ? step : 0)
-                    }
-                    return .just(nil)
                 }.asDriver(onErrorJustReturn: nil)
                     .drive(self.stepCount)
                     .disposed(by: self.disposeBag)
+                
+                stepInfo.flatMap { data -> Observable<Int?> in
+                        let str = data.hexEncodedString()
+                        let start = str.index(str.startIndex, offsetBy: 24)
+                        let end = str.index(start, offsetBy: 8)
+                        let range = start..<end
+                        let mySubstring = String(str[range])
+                        
+                        let cal = Int(mySubstring, radix: 16) ?? 0
+                        return .just(cal != 0 ? cal : 0)
+                }.asDriver(onErrorJustReturn: nil)
+                    .drive(self.calorie)
+                    .disposed(by: self.disposeBag)
+                
+                stepInfo.flatMap { data -> Observable<Double?> in
+                    let str = data.hexEncodedString()
+                    let start = str.index(str.startIndex, offsetBy: 32)
+                    let end = str.index(start, offsetBy: 4)
+                    let range = start..<end
+                    let mySubstring = String(str[range])
+                        
+                    let distance = Int(mySubstring, radix: 16) ?? 0
+                    return .just(distance != 0 ? Double(distance)/100.0 : 0.0)
+                }.asDriver(onErrorJustReturn: nil)
+                    .drive(self.distance)
+                    .disposed(by: self.disposeBag)
+                
+                deviceInfo.flatMap { data -> Observable<Int?> in
+                    let str = data.hexEncodedString()
+                    let start = str.index(str.startIndex, offsetBy: 34)
+                    let end = str.index(start, offsetBy: 4)
+                    let range = start..<end
+                    let mySubstring = String(str[range])
+
+                    let battery = Int(mySubstring, radix: 16) ?? 0
+                    return .just(battery != 0 ? battery : 0)
+                }.asDriver(onErrorJustReturn: nil)
+                    .drive(self.battery)
+                    .disposed(by: self.disposeBag)
+                
             } else {
                 // try to connect again
             }

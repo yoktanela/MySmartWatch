@@ -99,5 +99,17 @@ class StepCountViewController: UIViewController {
             }.asDriver(onErrorJustReturn: "")
             .drive(stepCountLabel.rx.text)
             .disposed(by: disposeBag)
+        
+        peripheralViewModel?.battery.subscribe(onNext: { battery in
+            print("BATTERY: \(battery)")
+        })
+        
+        peripheralViewModel?.distance.subscribe(onNext: { distance in
+            print("DISTANCE: \(distance)")
+        })
+        
+        peripheralViewModel?.calorie.subscribe(onNext: { cal in
+            print("CAL: \(cal)")
+        })
     }
 }
