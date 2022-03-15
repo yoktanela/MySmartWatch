@@ -43,31 +43,49 @@ class BluetoothService {
             }
     }
     
+    public func getService(for peripheral: CBPeripheral, serviceUUID: String) -> Observable<CBService?> {
+        if let service = peripheral.services?
+            .first(where: { $0.uuid.uuidString.isEqual(to: serviceUUID)}) {
+            return .just(service)
+        } else {
+            peripheral.discoverServices([CBUUID(string: serviceUUID)])
+            return peripheral.rx.didDiscoverServices
+                .flatMap{ services -> Observable<CBService?> in
+                    return .just(services.first(where: { $0.uuid.uuidString
+                            .isEqual(to: serviceUUID)
+                    }))
+                }
+        }
+    }
+    
+    public func getCharacteristic(for peripheral: CBPeripheral, serviceUUID: String, characteristicUUID: String) -> Observable<CBCharacteristic?> {
+        return self.getService(for: peripheral, serviceUUID: serviceUUID)
+            .observe(on: MainScheduler.instance)
+            .compactMap{$0}
+            .flatMap { service -> Observable<CBCharacteristic?> in
+                if let characteristic = service.characteristics?
+                    .first(where: {$0.uuid.uuidString.isEqual(to: characteristicUUID)}) {
+                    return .just(characteristic)
+                } else {
+                    peripheral.discoverCharacteristics([CBUUID(string: characteristicUUID)], for: service)
+                    return peripheral.rx.didDiscoverCharacteristics
+                        .flatMap { characteristics -> Observable<CBCharacteristic?> in
+                            return .just(characteristics.first(where: { $0.uuid.uuidString
+                                .isEqual(to: characteristicUUID)
+                            }))
+                        }
+                }
+            }
+    }
+    
     public func setNotify(for peripheral: CBPeripheral, serviceUUID: String, characteristicUUID: String) -> Observable<Data?> {
         
-        peripheral.discoverServices([CBUUID(string: serviceUUID)])
-
-        peripheral.rx.didDiscoverServices
-            .flatMap{ services -> Observable<CBService?> in
-                return .just(services.first(where: { $0.uuid.uuidString
-                        .isEqual(to: serviceUUID)
-                }))
-            }.subscribe( onNext: { service in
-                if let service = service {
-                    peripheral.discoverCharacteristics([CBUUID(string: characteristicUUID)], for: service)
-                }
-            }).disposed(by: disposeBag)
-        
-        peripheral.rx.didDiscoverCharacteristics
-            .flatMap { characteristics -> Observable<CBCharacteristic?> in
-                return .just(characteristics.first(where: { $0.uuid.uuidString
-                    .isEqual(to: characteristicUUID)
-                }))
-            }.subscribe( onNext: { characteristic in
-            if let characteristic = characteristic {
+        getCharacteristic(for: peripheral, serviceUUID: serviceUUID, characteristicUUID: characteristicUUID)
+            .observe(on: MainScheduler.instance)
+            .compactMap{$0}
+            .subscribe(onNext: { characteristic in
                 peripheral.setNotifyValue(true, for: characteristic)
-            }
-        }).disposed(by: disposeBag)
+            })
         
         let characteristic = peripheral.rx.didUpdateValue
             .flatMap { characteristic -> Observable<CBCharacteristic?> in
@@ -84,4 +102,15 @@ class BluetoothService {
         
         return result
     }
+    
+    public func writeValue(for peripheral: CBPeripheral, serviceUUID: String, characteristicUUID: String, data: Data) {
+        
+        getCharacteristic(for: peripheral, serviceUUID: serviceUUID, characteristicUUID: characteristicUUID)
+            .observe(on: MainScheduler.instance)
+            .compactMap{$0}
+            .subscribe(onNext: { characteristic in
+                peripheral.writeValue(data, for: characteristic, type: .withResponse)
+            })
+            .disposed(by: disposeBag)
+        }
 }

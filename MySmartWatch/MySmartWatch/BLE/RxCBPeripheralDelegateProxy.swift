@@ -72,4 +72,12 @@ public extension Reactive where Base: CBPeripheral {
                 return parameters[1] as! CBCharacteristic
             }
     }
+    
+    var didWriteValue: Observable<CBCharacteristic> {
+        delegate.methodInvoked(#selector(CBPeripheralDelegate
+                                            .peripheral(_:didWriteValueFor:error:) as ((CBPeripheralDelegate) -> ((CBPeripheral, CBCharacteristic, Error?) -> Void))?))
+            .map { parameters in
+                return parameters[1] as! CBCharacteristic
+            }
+    }
 }
