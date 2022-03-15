@@ -37,6 +37,38 @@ class StepCountViewController: UIViewController {
             return imgView
         }()
     
+    var calorieLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.textColor = UIColor(named: "textColor")
+        lbl.font = UIFont.systemFont(ofSize: 50, weight: .light)
+        lbl.textAlignment = .center
+        lbl.numberOfLines = 0
+        return lbl
+    }()
+    
+    var calImg: UIImageView = {
+            let imgView = UIImageView()
+            imgView.image = UIImage(named: "calorieImg")
+            imgView.layer.opacity = 0.5
+            return imgView
+        }()
+    
+    var distanceLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.textColor = UIColor(named: "textColor")
+        lbl.font = UIFont.systemFont(ofSize: 50, weight: .light)
+        lbl.textAlignment = .center
+        lbl.numberOfLines = 0
+        return lbl
+    }()
+    
+    var distanceImg: UIImageView = {
+            let imgView = UIImageView()
+            imgView.image = UIImage(named: "distanceImg")
+            imgView.layer.opacity = 0.5
+            return imgView
+        }()
+    
     init(peripheralViewModel: PeripheralViewModel) {
         self.peripheralViewModel = peripheralViewModel
         super.init(nibName: nil, bundle: nil)
@@ -75,6 +107,36 @@ class StepCountViewController: UIViewController {
         let heightImgConstraint = stepImg.heightAnchor.constraint(equalToConstant: 50.0)
         let centerXImg = stepImg.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
         self.view.addConstraints([topImgConstariant, widthImgConstraint, heightImgConstraint, centerXImg])
+        
+        self.view.addSubview(calorieLabel)
+        calorieLabel.translatesAutoresizingMaskIntoConstraints = false
+        let topCalLblConstariant = calorieLabel.topAnchor.constraint(equalTo: stepImg.bottomAnchor, constant: 50.0)
+        let leftCalLblConstraint = calorieLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20.0)
+        let rightCalLblConstraint = calorieLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -20.0)
+        self.view.addConstraints([topCalLblConstariant, leftCalLblConstraint, rightCalLblConstraint])
+        
+        self.view.addSubview(calImg)
+        calImg.translatesAutoresizingMaskIntoConstraints = false
+        let topCalImgConstariant = calImg.topAnchor.constraint(equalTo: self.calorieLabel.bottomAnchor, constant: 20.0)
+        let widthCalImgConstraint = calImg.widthAnchor.constraint(equalTo: stepImg.heightAnchor)
+        let heightCalImgConstraint = calImg.heightAnchor.constraint(equalToConstant: 50.0)
+        let centerXCalImg = calImg.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+        self.view.addConstraints([topCalImgConstariant, widthCalImgConstraint, heightCalImgConstraint, centerXCalImg])
+        
+        self.view.addSubview(distanceLabel)
+        distanceLabel.translatesAutoresizingMaskIntoConstraints = false
+        let topDistanceLblConstariant = distanceLabel.topAnchor.constraint(equalTo: calImg.bottomAnchor, constant: 50.0)
+        let leftDistanceLblConstraint = distanceLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20.0)
+        let rightDistanceLblConstraint = distanceLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -20.0)
+        self.view.addConstraints([topDistanceLblConstariant, leftDistanceLblConstraint, rightDistanceLblConstraint])
+        
+        self.view.addSubview(distanceImg)
+        distanceImg.translatesAutoresizingMaskIntoConstraints = false
+        let topDistanceImgConstariant = distanceImg.topAnchor.constraint(equalTo: self.distanceLabel.bottomAnchor, constant: 20.0)
+        let widthDistanceImgConstraint = distanceImg.widthAnchor.constraint(equalTo: stepImg.heightAnchor)
+        let heightDistanceImgConstraint = distanceImg.heightAnchor.constraint(equalToConstant: 50.0)
+        let centerXDistanceImg = distanceImg.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+        self.view.addConstraints([topDistanceImgConstariant, widthDistanceImgConstraint, heightDistanceImgConstraint, centerXDistanceImg])
     }
     
     func bindUI() {
@@ -96,20 +158,24 @@ class StepCountViewController: UIViewController {
             .compactMap {$0}
             .flatMap { step -> Observable<String> in
                 return .just(String(step))
-            }.asDriver(onErrorJustReturn: "")
+            }.asDriver(onErrorJustReturn: "-")
             .drive(stepCountLabel.rx.text)
             .disposed(by: disposeBag)
         
-        peripheralViewModel?.battery.subscribe(onNext: { battery in
-            print("BATTERY: \(battery)")
-        })
+        peripheralViewModel?.calorie
+            .compactMap{$0}
+            .flatMap{ cal -> Observable<String> in
+                return .just("\(String(cal)) cal")
+            }.asDriver(onErrorJustReturn: "-")
+            .drive(calorieLabel.rx.text)
+            .disposed(by: disposeBag)
         
-        peripheralViewModel?.distance.subscribe(onNext: { distance in
-            print("DISTANCE: \(distance)")
-        })
-        
-        peripheralViewModel?.calorie.subscribe(onNext: { cal in
-            print("CAL: \(cal)")
-        })
+        peripheralViewModel?.distance
+            .compactMap{$0}
+            .flatMap{ distance -> Observable<String> in
+                return .just("\(String(distance)) km")
+            }.asDriver(onErrorJustReturn: "-")
+            .drive(distanceLabel.rx.text)
+            .disposed(by: disposeBag)
     }
 }
