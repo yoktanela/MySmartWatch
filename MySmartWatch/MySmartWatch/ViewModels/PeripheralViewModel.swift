@@ -22,6 +22,11 @@ class PeripheralViewModel: NSObject {
     var maxHeartRate = BehaviorRelay<Int>(value: 0)
     var averageHeartRate = BehaviorRelay<Int>(value: 0)
     
+    var stepCount = BehaviorRelay<Int?>(value: nil)
+    var calorie = BehaviorRelay<Int?>(value: nil)
+    var distance = BehaviorRelay<Double?>(value: nil)
+    var battery = BehaviorRelay<Int?>(value: nil)
+    
     init(bluetoothService: BluetoothService, peripheral: CBPeripheral) {
         super.init()
         self.bluetoothService = bluetoothService
@@ -83,17 +88,56 @@ class PeripheralViewModel: NSObject {
             if (value) {
                 // Notify for primary service
                 self.bluetoothService.setNotify(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID)
+                
                 // Notify for heart rate service
                 self.bluetoothService.setNotify(for: self.peripheral, serviceUUID: Constants.heartRatePeripheralServiceUUID, characteristicUUID: Constants.heartRateCharacteristicUUID).flatMap { data -> Observable<Int> in
                     if let data = data {
-                        let str = data.hexEncodedString().dropFirst(2)
-                        let rate = Int(Int8(bitPattern: UInt8(str, radix: 16) ?? 0))
-                        return .just(rate != 0 ? rate : 0)
+                        return .just(data.toInt(startIndex: 2, offset: 2) ?? 0)
                     }
                     return .just(0)
                 }.asDriver(onErrorJustReturn: 0)
                     .drive(self.heartRate)
                     .disposed(by: self.disposeBag)
+                
+                // Set initial features
+                self.bluetoothService.writeValue(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID, data: "BE0609FB01".toData())
+                                  
+                self.bluetoothService.writeValue(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID, data: "BE0203ED".toData())
+                
+                self.bluetoothService.writeValue(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID, data: "BE0205ED".toData())
+                
+                // Notify for step count characteristic
+                let dataObs = self.bluetoothService.setNotify(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.stepCountCharacteristicUUID).compactMap{$0}
+                let stepInfo = dataObs
+                    .filter {String($0.hexEncodedString().prefix(2)).isEqual(to: "DE")}
+                let deviceInfo = dataObs
+                    .filter {String($0.hexEncodedString().prefix(2)).isEqual(to: "00")}
+                    
+                stepInfo.flatMap { data -> Observable<Int?> in
+                    return .just(data.toInt(startIndex: 16, offset: 8))
+                }.asDriver(onErrorJustReturn: nil)
+                    .drive(self.stepCount)
+                    .disposed(by: self.disposeBag)
+                
+                stepInfo.flatMap { data -> Observable<Int?> in
+                    return .just(data.toInt(startIndex: 24, offset: 8))
+                }.asDriver(onErrorJustReturn: nil)
+                    .drive(self.calorie)
+                    .disposed(by: self.disposeBag)
+                
+                stepInfo.flatMap { data -> Observable<Double?> in
+                    let distance = data.toInt(startIndex: 32, offset: 4) ?? 0
+                    return .just(Double(distance)/100.0)
+                }.asDriver(onErrorJustReturn: nil)
+                    .drive(self.distance)
+                    .disposed(by: self.disposeBag)
+                
+                deviceInfo.flatMap { data -> Observable<Int?> in
+                    return .just(data.toInt(startIndex: 34, offset: 4))
+                }.asDriver(onErrorJustReturn: nil)
+                    .drive(self.battery)
+                    .disposed(by: self.disposeBag)
+                
             } else {
                 // try to connect again
             }
