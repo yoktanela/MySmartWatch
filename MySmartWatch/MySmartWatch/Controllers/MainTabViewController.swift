@@ -45,6 +45,7 @@ class MainTabBarController: UITabBarController {
                                   title: String,
                                   image: UIImage) -> UIViewController {
         let navigationController = UINavigationController(rootViewController: controller)
+        navigationController.isNavigationBarHidden = true
         let tabBarItem = UITabBarItem(title: title, image: image, selectedImage: nil)
         navigationController.tabBarItem = tabBarItem
         return navigationController

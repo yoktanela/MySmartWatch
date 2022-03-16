@@ -76,9 +76,9 @@ class HeartRateViewController: UIViewController {
     func setSubviews() {
         self.view.addSubview(heartRateView)
         heartRateView.translatesAutoresizingMaskIntoConstraints = false
-        let topLblConstariant = heartRateView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 50.0)
+        let topLblConstariant = heartRateView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 100.0)
         let leftLblConstraint = heartRateView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20.0)
-        let rightLblConstraint = heartRateView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -20.0)
+        let rightLblConstraint = heartRateView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 20.0)
         self.view.addConstraints([topLblConstariant, leftLblConstraint, rightLblConstraint])
         
         self.view.addSubview(activityIndicator)

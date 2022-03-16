@@ -143,4 +143,8 @@ class PeripheralViewModel: NSObject {
             }
         })
     }
+    
+    func getDeviceName() -> String? {
+        return peripheral.name
+    }
 }
