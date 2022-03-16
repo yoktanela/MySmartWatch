@@ -38,25 +38,33 @@ public extension Reactive where Base: CBCentralManager {
     }
     
     var didDiscoverPeripheral: Observable<Peripheral> {
-        delegate.methodInvoked(#selector(CBCentralManagerDelegate
-                                            .centralManager(_:didDiscover:advertisementData:rssi:)))
-            .map { parameters in
-                Peripheral(peripheral: parameters[1] as! CBPeripheral, advertisementData: parameters[2] as! [String:Any], rssi: parameters[3] as! NSNumber)
+        let selector = #selector(CBCentralManagerDelegate
+                                    .centralManager(_:didDiscover:advertisementData:rssi:))
+        return delegate.methodInvoked(selector)
+            .compactMap { parameters -> Peripheral? in
+                guard let peripheral = parameters[1] as? CBPeripheral,
+                        let advertisementData = parameters[2] as? [String:Any],
+                        let rssi = parameters[3] as? NSNumber else {
+                    return nil
+                }
+                return Peripheral(peripheral: peripheral, advertisementData: advertisementData, rssi: rssi)
             }
     }
     
     var stateChanged: Observable<CBManagerState> {
-        delegate.methodInvoked(#selector(CBCentralManagerDelegate.centralManagerDidUpdateState(_:)))
-            .map { parameters in
-                (parameters[0] as! CBCentralManager).state
+        let selector = #selector(CBCentralManagerDelegate.centralManagerDidUpdateState(_:))
+        return delegate.methodInvoked(selector)
+            .compactMap { parameters -> CBManagerState? in
+                return (parameters[0] as? CBCentralManager)?.state ?? nil
             }
     }
     
     var connectedPeripheral: Observable<CBPeripheral> {
-        delegate.methodInvoked(#selector(CBCentralManagerDelegate
-                                            .centralManager(_:didConnect:)))
-            .map { parameters in
-                return parameters[1] as! CBPeripheral
+        let selector = #selector(CBCentralManagerDelegate
+                                    .centralManager(_:didConnect:))
+        return delegate.methodInvoked(selector)
+            .compactMap { parameters in
+                return parameters[1] as? CBPeripheral
             }
     }
 }

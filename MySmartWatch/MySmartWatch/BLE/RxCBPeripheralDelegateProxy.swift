@@ -35,49 +35,48 @@ public extension Reactive where Base: CBPeripheral {
     var didDiscoverServices: Observable<[CBService]> {
         delegate.methodInvoked(#selector(CBPeripheralDelegate
                                             .peripheral(_:didDiscoverServices:)))
-            .map { parameters in
-                (parameters[0] as! CBPeripheral).services ?? []
+            .compactMap { parameters -> [CBService]? in
+                return (parameters[0] as? CBPeripheral)?.services
             }
     }
     
     var didDiscoverCharacteristics: Observable<[CBCharacteristic]> {
-        delegate.methodInvoked(#selector(CBPeripheralDelegate
+        return delegate.methodInvoked(#selector(CBPeripheralDelegate
                                             .peripheral(_:didDiscoverCharacteristicsFor:error:)))
-            .map { parameters in
-                (parameters[1] as! CBService).characteristics ?? []
+            .compactMap{ parameters -> [CBCharacteristic]? in
+                return (parameters[1] as? CBService)?.characteristics
             }
     }
     
     var didDiscoverDescriptors: Observable<[CBDescriptor]> {
-        delegate.methodInvoked(#selector(CBPeripheralDelegate
+        return delegate.methodInvoked(#selector(CBPeripheralDelegate
                                             .peripheral(_:didDiscoverDescriptorsFor:error:)))
-            .map { parameters in
-                let characteristic = parameters[1] as! CBCharacteristic
-                return characteristic.descriptors ?? []
+            .compactMap { parameters -> [CBDescriptor]? in
+                return (parameters[1] as? CBCharacteristic)?.descriptors
             }
     }
     
     var didNotify: Observable<CBCharacteristic> {
         delegate.methodInvoked(#selector(CBPeripheralDelegate
                                             .peripheral(_:didUpdateNotificationStateFor:error:)))
-            .map { parameters in
-                return parameters[1] as! CBCharacteristic
+            .compactMap { parameters in
+                return parameters[1] as? CBCharacteristic
             }
     }
     
     var didUpdateValue: Observable<CBCharacteristic> {
         delegate.methodInvoked(#selector(CBPeripheralDelegate
                                             .peripheral(_:didUpdateValueFor:error:) as ((CBPeripheralDelegate) -> ((CBPeripheral, CBCharacteristic, Error?) -> Void))?))
-            .map { parameters in
-                return parameters[1] as! CBCharacteristic
+            .compactMap { paremeters in
+                return paremeters[1] as? CBCharacteristic
             }
     }
     
     var didWriteValue: Observable<CBCharacteristic> {
         delegate.methodInvoked(#selector(CBPeripheralDelegate
                                             .peripheral(_:didWriteValueFor:error:) as ((CBPeripheralDelegate) -> ((CBPeripheral, CBCharacteristic, Error?) -> Void))?))
-            .map { parameters in
-                return parameters[1] as! CBCharacteristic
+            .compactMap { parameters in
+                return parameters[1] as? CBCharacteristic
             }
     }
 }
