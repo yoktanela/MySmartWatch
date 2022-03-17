@@ -61,15 +61,7 @@ class SettingView: UIControl {
         let bottomLblConstariant = settingLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10.0)
         self.addConstraints([topLblConstariant, leftLblConstraint, bottomLblConstariant])
         
-        let bottomBorder = UIView()
-        bottomBorder.backgroundColor = UIColor(named: "lightGray")
-        self.addSubview(bottomBorder)
-        bottomBorder.translatesAutoresizingMaskIntoConstraints = false
-        let leftConstraint = bottomBorder.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20.0)
-        let rightConstraint = bottomBorder.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20.0)
-        let bottomConstraint = bottomBorder.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        let heightConstraint = bottomBorder.heightAnchor.constraint(equalToConstant: 1.0)
-        self.addConstraints([leftConstraint, rightConstraint, bottomConstraint, heightConstraint])
+        self.addBottomSeperator()
     }
     
     func setNextImage() {
@@ -80,5 +72,19 @@ class SettingView: UIControl {
         let widthImgConstraint = nextImg.widthAnchor.constraint(equalTo: nextImg.heightAnchor)
         let heightImgConstraint = nextImg.heightAnchor.constraint(equalToConstant: 20.0)
         self.addConstraints([centerY, rightConstraint, widthImgConstraint, heightImgConstraint])
+    }
+}
+
+extension UIView {
+    func addBottomSeperator() {
+        let bottomBorder = UIView()
+        bottomBorder.backgroundColor = UIColor(named: "lightGray")
+        self.addSubview(bottomBorder)
+        bottomBorder.translatesAutoresizingMaskIntoConstraints = false
+        let leftConstraint = bottomBorder.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20.0)
+        let rightConstraint = bottomBorder.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20.0)
+        let bottomConstraint = bottomBorder.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        let heightConstraint = bottomBorder.heightAnchor.constraint(equalToConstant: 1.0)
+        self.addConstraints([leftConstraint, rightConstraint, bottomConstraint, heightConstraint])
     }
 }

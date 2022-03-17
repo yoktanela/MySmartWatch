@@ -15,6 +15,12 @@ class AlarmClockViewController: UIViewController {
     var peripheralViewModel: PeripheralViewModel!
     private var disposeBag = DisposeBag()
     
+    var alarmTableView: UITableView = {
+        var tableView = UITableView()
+        tableView.contentInset = UIEdgeInsets(top: 10.0, left: 0.0, bottom: 10.0, right: 0.0)
+        return tableView
+    }()
+    
     init(peripheralViewModel: PeripheralViewModel) {
         self.peripheralViewModel = peripheralViewModel
         super.init(nibName: nil, bundle: nil)
@@ -45,19 +51,39 @@ class AlarmClockViewController: UIViewController {
     }
     
     func setSubViews() {
-        // set alarm table view
+        self.view.addSubview(alarmTableView)
+        alarmTableView.translatesAutoresizingMaskIntoConstraints = false
+        let topConstraint = self.alarmTableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10.0)
+        let bottomConstraint = self.alarmTableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 30.0)
+        let leftConstraint = self.alarmTableView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0.0)
+        let rightConstraint = self.alarmTableView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0.0)
+        self.view.addConstraints([topConstraint, bottomConstraint, leftConstraint, rightConstraint])
+        
+        alarmTableView.register(AlarmViewCell.self, forCellReuseIdentifier: "alarmViewCell")
+        alarmTableView.separatorStyle = .none
     }
     
     func bindUI() {
-        // bind ui
+        
         self.peripheralViewModel
             .alarms
-            .subscribe( onNext: { alarms in
-                alarms.forEach { alarm in
-                    print(alarm.hour)
-                    print(alarm.minute)
+            .observe(on: MainScheduler.instance)
+            .bind(to: self.alarmTableView.rx.items) { (tableView, row, element ) in
+                let cell = self.alarmTableView.dequeueReusableCell(withIdentifier: "alarmViewCell", for: IndexPath(row: row, section: 0)) as! AlarmViewCell
+                cell.customizeCell(alarm: element)
+                return cell
+            }.disposed(by: disposeBag)
+        
+        if let rightBarItem = self.navigationItem.rightBarButtonItem {
+            self.peripheralViewModel
+                .alarms
+                .flatMap { alarms -> Observable<Bool> in
+                    return .just(alarms.count < self.peripheralViewModel.maxAlarmCount)
                 }
-            })
+                .asDriver(onErrorDriveWith: .just(false))
+                .drive(rightBarItem.rx.isEnabled)
+                .disposed(by: disposeBag)
+        }
     }
     
     @objc func back(sender: UIBarButtonItem) {

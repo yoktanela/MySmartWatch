@@ -32,5 +32,9 @@ class Alarm : Equatable {
         let differentRepeatDays = lhs.repeatDays.contains(where: {!rhs.repeatDays.contains($0)}) || rhs.repeatDays.contains(where: {!lhs.repeatDays.contains($0)})
         return lhs.hour == rhs.hour && lhs.minute == rhs.minute && !differentRepeatDays
     }
+    
+    func getAlarmString() -> String {
+        return "\(String(format: "%02d", hour)):\(String(format: "%02d", minute))"
+    }
 }
 

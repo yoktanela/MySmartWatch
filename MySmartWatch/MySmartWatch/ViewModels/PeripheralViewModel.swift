@@ -28,6 +28,7 @@ class PeripheralViewModel: NSObject {
     var battery = BehaviorRelay<Int?>(value: nil)
     
     var alarms = BehaviorRelay<[Alarm]>(value: [])
+    var maxAlarmCount = 5
     
     init(bluetoothService: BluetoothService, peripheral: CBPeripheral) {
         super.init()
@@ -144,6 +145,26 @@ class PeripheralViewModel: NSObject {
                 // try to connect again
             }
         })
+        
+        // alarms
+        self.alarms
+            .skip(1)
+            .subscribe(onNext: { alarms in
+                var str = "BE0109FE"
+                let count = pow(2.0, alarms.count)-1
+                str += String(format:"%02X", NSDecimalNumber(decimal: count).intValue)
+                alarms.forEach { alarm in
+                    var repeats = 0
+                    alarm.repeatDays.forEach({ repeats += $0.rawValue})
+                    str += String(format:"%02X", alarm.hour)
+                    str += String(format:"%02X", alarm.minute)
+                    str += String(format:"%02X", repeats)
+                }
+                self.bluetoothService.writeValue(for: self.peripheral,
+                                                    serviceUUID: Constants.primaryServiceUUID,
+                                                    characteristicUUID: Constants.primaryCharacteristicUUID,
+                                                    data: str.toData())
+            }).disposed(by: disposeBag)
     }
     
     func getDeviceName() -> String? {
