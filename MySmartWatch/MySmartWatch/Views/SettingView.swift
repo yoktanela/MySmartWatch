@@ -55,10 +55,6 @@ class SettingView: UIControl {
     }
     
     private func setUp() {
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor(named: "darkGray")?.cgColor
-        self.layer.cornerRadius = 2.0
-        
         self.addSubview(settingImg)
         settingImg.translatesAutoresizingMaskIntoConstraints = false
         let widthImgConstraint = settingImg.widthAnchor.constraint(equalTo: settingImg.heightAnchor)

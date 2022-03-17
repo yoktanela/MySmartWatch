@@ -15,9 +15,9 @@ class SettingsViewController: UIViewController {
     var peripheralViewModel: PeripheralViewModel?
     private var disposeBag = DisposeBag()
     
-    var batteryView: SettingView = {
-        let settingView = SettingView(text: "Battery", image: #imageLiteral(resourceName: "batteryImg"))
-        return settingView
+    var deviceInfoView: DeviceInfoView = {
+        let view = DeviceInfoView()
+        return view
     }()
     
     init(peripheralViewModel: PeripheralViewModel) {
@@ -37,22 +37,24 @@ class SettingsViewController: UIViewController {
     }
     
     func setSubViews() {
-        self.view.addSubview(batteryView)
-        self.batteryView.translatesAutoresizingMaskIntoConstraints = false
-        let batteryTopConstraint = batteryView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 50.0)
-        let batteryRightConstraint = batteryView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -20.0)
-        let batteryLeftConstraint = batteryView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20.0)
-        self.view.addConstraints([batteryTopConstraint, batteryLeftConstraint, batteryRightConstraint])
+        
         if let deviceName = self.peripheralViewModel?.getDeviceName() {
-            batteryView.setSettingText(text: deviceName)
+            deviceInfoView.setDeviceName(name: deviceName)
         }
+        
+        self.view.addSubview(deviceInfoView)
+        self.deviceInfoView.translatesAutoresizingMaskIntoConstraints = false
+        let batteryTopConstraint = deviceInfoView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10.0)
+        let batteryRightConstraint = deviceInfoView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -20.0)
+        let batteryLeftConstraint = deviceInfoView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20.0)
+        self.view.addConstraints([batteryTopConstraint, batteryLeftConstraint, batteryRightConstraint])
         
         peripheralViewModel?.battery
             .compactMap{$0}
             .flatMap { value -> Observable<String> in
-                return .just("\(String(value)) %")
+                return .just("\(String(value))%")
             }.asDriver(onErrorJustReturn: "-")
-            .drive(self.batteryView.rx.value)
+            .drive(self.deviceInfoView.rx.batteryText)
             .disposed(by: disposeBag)
     }
     
