@@ -92,7 +92,7 @@ class SettingsViewController: UIViewController {
         
         alarmSettingView.rx.controlEvent(.touchUpInside)
             .subscribe(onNext: {
-                let alarmVC = AlarmSettingViewController(peripheralViewModel: self.peripheralViewModel)
+                let alarmVC = AlarmClockViewController(peripheralViewModel: self.peripheralViewModel)
                 let navigationController = UINavigationController(rootViewController: alarmVC)
                 alarmVC.navigationItem.title = "Alarm Clock"
                 self.present(navigationController, animated: true, completion: nil)

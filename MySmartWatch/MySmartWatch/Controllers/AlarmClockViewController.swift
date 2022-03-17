@@ -1,5 +1,5 @@
 //
-//  AlarmSettingViewController.swift
+//  AlarmClockViewController.swift
 //  MySmartWatch
 //
 //  Created by Elanur Yoktan on 17.03.2022.
@@ -10,9 +10,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class AlarmSettingViewController: UIViewController {
+class AlarmClockViewController: UIViewController {
     
-    var peripheralViewModel: PeripheralViewModel?
+    var peripheralViewModel: PeripheralViewModel!
     private var disposeBag = DisposeBag()
     
     init(peripheralViewModel: PeripheralViewModel) {
@@ -27,6 +27,7 @@ class AlarmSettingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.systemBackground
+        
         self.navigationItem.title = "Alarm Clock"
         self.navigationItem
             .setLeftBarButton(UIBarButtonItem.menuButton(image: #imageLiteral(resourceName: "backImg")
@@ -39,6 +40,24 @@ class AlarmSettingViewController: UIViewController {
                                                             .withRenderingMode(.alwaysOriginal),
                                                           self,
                                                           action: #selector(addAlarm(sender:))), animated: true)
+        self.setSubViews()
+        self.bindUI()
+    }
+    
+    func setSubViews() {
+        // set alarm table view
+    }
+    
+    func bindUI() {
+        // bind ui
+        self.peripheralViewModel
+            .alarms
+            .subscribe( onNext: { alarms in
+                alarms.forEach { alarm in
+                    print(alarm.hour)
+                    print(alarm.minute)
+                }
+            })
     }
     
     @objc func back(sender: UIBarButtonItem) {
@@ -46,6 +65,8 @@ class AlarmSettingViewController: UIViewController {
     }
     
     @objc func addAlarm(sender: UIBarButtonItem) {
-        
+        let addAlarmVC = AddAlarmViewController(peripheralViewModel: peripheralViewModel)
+        let navController = UINavigationController(rootViewController: addAlarmVC)
+        self.present(navController, animated: true, completion: nil)
     }
 }

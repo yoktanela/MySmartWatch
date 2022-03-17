@@ -27,6 +27,8 @@ class PeripheralViewModel: NSObject {
     var distance = BehaviorRelay<Double?>(value: nil)
     var battery = BehaviorRelay<Int?>(value: nil)
     
+    var alarms = BehaviorRelay<[Alarm]>(value: [])
+    
     init(bluetoothService: BluetoothService, peripheral: CBPeripheral) {
         super.init()
         self.bluetoothService = bluetoothService
@@ -150,5 +152,10 @@ class PeripheralViewModel: NSObject {
     
     func vibrateDevice() {
         self.bluetoothService.writeValue(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID, data: "BE060FED".toData())
+    }
+    
+    func addAlarm(hour: Int, minute: Int, repeatDays: [Day]) {
+        let alarm = Alarm(hour: hour, minute: minute, repeatDays: repeatDays)
+        self.alarms.add(element: alarm)
     }
 }
