@@ -29,13 +29,23 @@ class AlarmSettingViewController: UIViewController {
         self.view.backgroundColor = UIColor.systemBackground
         self.navigationItem.title = "Alarm Clock"
         self.navigationItem
-            .setLeftBarButton(UIBarButtonItem(title: "Back",
-                                              style: .plain,
-                                              target: self,
-                                              action: #selector(back(sender:))), animated: true)
+            .setLeftBarButton(UIBarButtonItem.menuButton(image: #imageLiteral(resourceName: "backImg")
+                                                            .withRenderingMode(.alwaysOriginal),
+                                                         self,
+                                                         action: #selector(back(sender:))), animated: true)
+        
+        self.navigationItem
+            .setRightBarButton(UIBarButtonItem.menuButton(image: #imageLiteral(resourceName: "plusImg")
+                                                            .withRenderingMode(.alwaysOriginal),
+                                                          self,
+                                                          action: #selector(addAlarm(sender:))), animated: true)
     }
     
     @objc func back(sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func addAlarm(sender: UIBarButtonItem) {
+        
     }
 }
