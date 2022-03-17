@@ -12,13 +12,6 @@ import RxCocoa
 
 class SettingView: UIControl {
     
-    var value: String = "-" {
-        didSet {
-            self.setValue()
-            sendActions(for: .valueChanged)
-        }
-    }
-    
     var settingLabel: UILabel = {
         let lbl = UILabel()
         lbl.textColor = UIColor(named: "textColor")
@@ -32,15 +25,6 @@ class SettingView: UIControl {
         let imgView = UIImageView()
         imgView.layer.opacity = 0.5
         return imgView
-    }()
-    
-    var valueLabel: UILabel = {
-        let lbl = UILabel()
-        lbl.textColor = UIColor(named: "textColor")
-        lbl.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-        lbl.textAlignment = .left
-        lbl.numberOfLines = 0
-        return lbl
     }()
     
     init(text: String, image: UIImage) {
@@ -70,29 +54,14 @@ class SettingView: UIControl {
         let bottomLblConstariant = settingLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10.0)
         self.addConstraints([topLblConstariant, leftLblConstraint, bottomLblConstariant])
         
-        self.addSubview(valueLabel)
-        valueLabel.translatesAutoresizingMaskIntoConstraints = false
-        let topValConstraint = valueLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10.0)
-        let rightValConstraint = valueLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20.0)
-        self.addConstraints([topValConstraint, rightValConstraint])
-    }
-    
-    func setValue() {
-        self.valueLabel.text = value
-    }
-    
-    func setSettingText(text: String ) {
-        self.settingLabel.text = text
-    }
-}
-
-extension Reactive where Base: SettingView {
-
-    var value: ControlProperty<String> {
-        return base.rx.controlProperty(editingEvents: UIControl.Event.valueChanged, getter: { view in
-            return view.value
-        },setter: { (view, newValue) in
-            view.value = newValue
-        })
+        let bottomBorder = UIView()
+        bottomBorder.backgroundColor = UIColor(named: "lightGray")
+        self.addSubview(bottomBorder)
+        bottomBorder.translatesAutoresizingMaskIntoConstraints = false
+        let leftConstraint = bottomBorder.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 20.0)
+        let rightConstraint = bottomBorder.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20.0)
+        let bottomConstraint = bottomBorder.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        let heightConstraint = bottomBorder.heightAnchor.constraint(equalToConstant: 1.0)
+        self.addConstraints([leftConstraint, rightConstraint, bottomConstraint, heightConstraint])
     }
 }

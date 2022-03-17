@@ -147,4 +147,8 @@ class PeripheralViewModel: NSObject {
     func getDeviceName() -> String? {
         return peripheral.name
     }
+    
+    func vibrateDevice() {
+        self.bluetoothService.writeValue(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID, data: "BE060FED".toData())
+    }
 }

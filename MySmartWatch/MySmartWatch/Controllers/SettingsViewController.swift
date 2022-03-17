@@ -20,6 +20,11 @@ class SettingsViewController: UIViewController {
         return view
     }()
     
+    var findDeviceSetting: SettingView = {
+        let view = SettingView(text: "Find My Device", image: #imageLiteral(resourceName: "vibrationImg"))
+        return view
+    }()
+    
     init(peripheralViewModel: PeripheralViewModel) {
         self.peripheralViewModel = peripheralViewModel
         super.init(nibName: nil, bundle: nil)
@@ -34,6 +39,7 @@ class SettingsViewController: UIViewController {
         
         self.view.backgroundColor = UIColor.systemBackground
         self.setSubViews()
+        self.bindUI()
     }
     
     func setSubViews() {
@@ -49,12 +55,27 @@ class SettingsViewController: UIViewController {
         let batteryLeftConstraint = deviceInfoView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20.0)
         self.view.addConstraints([batteryTopConstraint, batteryLeftConstraint, batteryRightConstraint])
         
+        self.view.addSubview(findDeviceSetting)
+        self.findDeviceSetting.translatesAutoresizingMaskIntoConstraints = false
+        let findTopConstraint = findDeviceSetting.topAnchor.constraint(equalTo: self.deviceInfoView.bottomAnchor, constant: 20.0)
+        let findLeftConstraint = findDeviceSetting.leftAnchor.constraint(equalTo: self.view.leftAnchor)
+        let findRightConstraint = findDeviceSetting.rightAnchor.constraint(equalTo: self.view.rightAnchor)
+        self.view.addConstraints([findTopConstraint, findLeftConstraint, findRightConstraint])
+    }
+    
+    func bindUI() {
         peripheralViewModel?.battery
             .compactMap{$0}
             .flatMap { value -> Observable<String> in
                 return .just("\(String(value))%")
             }.asDriver(onErrorJustReturn: "-")
             .drive(self.deviceInfoView.rx.batteryText)
+            .disposed(by: disposeBag)
+        
+        findDeviceSetting.rx.controlEvent(.touchUpInside)
+            .subscribe(onNext: {
+                self.peripheralViewModel?.vibrateDevice()
+            })
             .disposed(by: disposeBag)
     }
     

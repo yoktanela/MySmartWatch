@@ -39,7 +39,6 @@ class DeviceInfoView: UIControl {
         lbl.textColor = UIColor(named: "textColor")
         lbl.font = UIFont.systemFont(ofSize: 9, weight: .semibold)
         lbl.textAlignment = .left
-        lbl.text = "100%"
         lbl.numberOfLines = 0
         return lbl
     }()
