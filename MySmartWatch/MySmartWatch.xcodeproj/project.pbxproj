@@ -21,6 +21,7 @@
 		5489F8F927E238E200DC019D /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8F827E238E200DC019D /* SettingsViewController.swift */; };
 		5489F8FB27E23C3C00DC019D /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8FA27E23C3C00DC019D /* SettingView.swift */; };
 		5489F8FD27E2AFA300DC019D /* DeviceInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8FC27E2AFA300DC019D /* DeviceInfoView.swift */; };
+		5489F8FF27E3444E00DC019D /* AlarmSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F8FE27E3444E00DC019D /* AlarmSettingViewController.swift */; };
 		54DDDFC027AA683E00AF7248 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFBF27AA683E00AF7248 /* AppDelegate.swift */; };
 		54DDDFC227AA683E00AF7248 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFC127AA683E00AF7248 /* SceneDelegate.swift */; };
 		54DDDFC427AA683E00AF7248 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFC327AA683E00AF7248 /* ViewController.swift */; };
@@ -77,6 +78,7 @@
 		5489F8F827E238E200DC019D /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		5489F8FA27E23C3C00DC019D /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		5489F8FC27E2AFA300DC019D /* DeviceInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoView.swift; sourceTree = "<group>"; };
+		5489F8FE27E3444E00DC019D /* AlarmSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSettingViewController.swift; sourceTree = "<group>"; };
 		54DDDFBC27AA683E00AF7248 /* MySmartWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MySmartWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54DDDFBF27AA683E00AF7248 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54DDDFC127AA683E00AF7248 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				54EDFA0727C00D480017FB6E /* HeartRateViewController.swift */,
 				5489F8F227DA334000DC019D /* StepCountViewController.swift */,
 				5489F8F827E238E200DC019D /* SettingsViewController.swift */,
+				5489F8FE27E3444E00DC019D /* AlarmSettingViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -528,6 +531,7 @@
 				54DDDFF627AAA29900AF7248 /* BehaviorRelayExtension.swift in Sources */,
 				540AEC4527C98A5300EC3851 /* BluetoothService.swift in Sources */,
 				54DDDFFC27AB1F5F00AF7248 /* PeripheralViewCell.swift in Sources */,
+				5489F8FF27E3444E00DC019D /* AlarmSettingViewController.swift in Sources */,
 				5489F8F527E138F100DC019D /* CounterDisplayView.swift in Sources */,
 				54EDFA0827C00D480017FB6E /* HeartRateViewController.swift in Sources */,
 				540AEC4A27C99C5E00EC3851 /* Peripheral.swift in Sources */,

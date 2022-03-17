@@ -15,7 +15,7 @@ class SettingView: UIControl {
     var settingLabel: UILabel = {
         let lbl = UILabel()
         lbl.textColor = UIColor(named: "textColor")
-        lbl.font = UIFont.systemFont(ofSize: 15, weight: .light)
+        lbl.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         lbl.textAlignment = .left
         lbl.numberOfLines = 0
         return lbl
@@ -27,11 +27,18 @@ class SettingView: UIControl {
         return imgView
     }()
     
-    init(text: String, image: UIImage) {
+    var nextImg: UIImageView = {
+        let imgView = UIImageView()
+        imgView.image = #imageLiteral(resourceName: "nextImg")
+        return imgView
+    }()
+    
+    init(text: String, image: UIImage, nextEnabled: Bool = false) {
         super.init(frame: CGRect.zero)
         self.settingLabel.text = text
         self.settingImg.image = image
         self.setUp()
+        if nextEnabled { self.setNextImage() }
     }
     
     required init?(coder: NSCoder) {
@@ -63,5 +70,15 @@ class SettingView: UIControl {
         let bottomConstraint = bottomBorder.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         let heightConstraint = bottomBorder.heightAnchor.constraint(equalToConstant: 1.0)
         self.addConstraints([leftConstraint, rightConstraint, bottomConstraint, heightConstraint])
+    }
+    
+    func setNextImage() {
+        self.addSubview(self.nextImg)
+        nextImg.translatesAutoresizingMaskIntoConstraints = false
+        let centerY = nextImg.centerYAnchor.constraint(equalTo: self.settingLabel.centerYAnchor)
+        let rightConstraint = nextImg.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20.0)
+        let widthImgConstraint = nextImg.widthAnchor.constraint(equalTo: nextImg.heightAnchor)
+        let heightImgConstraint = nextImg.heightAnchor.constraint(equalToConstant: 20.0)
+        self.addConstraints([centerY, rightConstraint, widthImgConstraint, heightImgConstraint])
     }
 }

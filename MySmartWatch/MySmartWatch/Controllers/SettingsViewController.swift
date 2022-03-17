@@ -12,7 +12,7 @@ import RxCocoa
 
 class SettingsViewController: UIViewController {
     
-    var peripheralViewModel: PeripheralViewModel?
+    var peripheralViewModel: PeripheralViewModel!
     private var disposeBag = DisposeBag()
     
     var deviceInfoView: DeviceInfoView = {
@@ -22,6 +22,11 @@ class SettingsViewController: UIViewController {
     
     var findDeviceSetting: SettingView = {
         let view = SettingView(text: "Find My Device", image: #imageLiteral(resourceName: "vibrationImg"))
+        return view
+    }()
+    
+    var alarmSettingView: SettingView = {
+        let view = SettingView(text: "Alarm Clock", image: #imageLiteral(resourceName: "alarmImg"), nextEnabled: true)
         return view
     }()
     
@@ -61,10 +66,17 @@ class SettingsViewController: UIViewController {
         let findLeftConstraint = findDeviceSetting.leftAnchor.constraint(equalTo: self.view.leftAnchor)
         let findRightConstraint = findDeviceSetting.rightAnchor.constraint(equalTo: self.view.rightAnchor)
         self.view.addConstraints([findTopConstraint, findLeftConstraint, findRightConstraint])
+        
+        self.view.addSubview(alarmSettingView)
+        self.alarmSettingView.translatesAutoresizingMaskIntoConstraints = false
+        let alarmTopConstraint = alarmSettingView.topAnchor.constraint(equalTo: self.findDeviceSetting.bottomAnchor, constant: 20.0)
+        let alarmLeftConstraint = alarmSettingView.leftAnchor.constraint(equalTo: self.view.leftAnchor)
+        let alarmRightConstraint = alarmSettingView.rightAnchor.constraint(equalTo: self.view.rightAnchor)
+        self.view.addConstraints([alarmTopConstraint, alarmLeftConstraint, alarmRightConstraint])
     }
     
     func bindUI() {
-        peripheralViewModel?.battery
+        peripheralViewModel.battery
             .compactMap{$0}
             .flatMap { value -> Observable<String> in
                 return .just("\(String(value))%")
@@ -74,7 +86,16 @@ class SettingsViewController: UIViewController {
         
         findDeviceSetting.rx.controlEvent(.touchUpInside)
             .subscribe(onNext: {
-                self.peripheralViewModel?.vibrateDevice()
+                self.peripheralViewModel.vibrateDevice()
+            })
+            .disposed(by: disposeBag)
+        
+        alarmSettingView.rx.controlEvent(.touchUpInside)
+            .subscribe(onNext: {
+                let alarmVC = AlarmSettingViewController(peripheralViewModel: self.peripheralViewModel)
+                let navigationController = UINavigationController(rootViewController: alarmVC)
+                alarmVC.navigationItem.title = "Alarm Clock"
+                self.present(navigationController, animated: true, completion: nil)
             })
             .disposed(by: disposeBag)
     }
