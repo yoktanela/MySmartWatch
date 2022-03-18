@@ -90,6 +90,7 @@ class ScanViewController: UIViewController {
                 self.scannerViewModel.stopScan()
                 let tabBarController = MainTabBarController(bluetoothService: self.bluetoothService, peripheral: heartRatePeripheral.peripheral)
                 tabBarController.modalPresentationStyle = .overFullScreen
+                self.navigationController?.isNavigationBarHidden = true
                 self.navigationController?.setViewControllers([tabBarController], animated: true)
             }).disposed(by: disposeBag)
         

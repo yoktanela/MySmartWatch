@@ -63,7 +63,7 @@ class StepCountViewController: UIViewController {
         
         self.view.addSubview(stepCountView)
         stepCountView.translatesAutoresizingMaskIntoConstraints = false
-        let stepTopConstariant = stepCountView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 50.0)
+        let stepTopConstariant = stepCountView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 100.0)
         let stepLeftConstraint = stepCountView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20.0)
         let stepRightConstraint = stepCountView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -20.0)
         self.view.addConstraints([stepTopConstariant, stepLeftConstraint, stepRightConstraint])

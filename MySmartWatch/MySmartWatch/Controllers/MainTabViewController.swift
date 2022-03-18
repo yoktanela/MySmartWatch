@@ -14,8 +14,12 @@ import RxCocoa
 class MainTabBarController: UITabBarController {
     
     var peripheralViewModel: PeripheralViewModel!
-
+    var bluetoothService: BluetoothService!
+    var peripheral: CBPeripheral!
+    
     init(bluetoothService: BluetoothService, peripheral: CBPeripheral) {
+        self.bluetoothService = bluetoothService
+        self.peripheral = peripheral
         self.peripheralViewModel = PeripheralViewModel(bluetoothService: bluetoothService, peripheral: peripheral)
         super.init(nibName: nil, bundle: nil)
     }
@@ -35,14 +39,17 @@ class MainTabBarController: UITabBarController {
         let heartRateTabBarItem = createTabBarItem(controller: heartRateVC, title: "Heart Rate", image: #imageLiteral(resourceName: "heartRateImg"))
         let stepCountVC = StepCountViewController(peripheralViewModel: self.peripheralViewModel)
         let stepCountTabBarItem = createTabBarItem(controller: stepCountVC, title: "Step Count", image: #imageLiteral(resourceName: "stepImg"))
+        let settingsVC = SettingsViewController(bluetoothService: bluetoothService, peripheral: peripheral)
+        let settingsTabBarItem = createTabBarItem(controller: settingsVC, title: "Settings", image: #imageLiteral(resourceName: "settingImg"))
         
-        self.setViewControllers([heartRateTabBarItem, stepCountTabBarItem], animated: false)
+        self.setViewControllers([heartRateTabBarItem, stepCountTabBarItem, settingsTabBarItem], animated: false)
     }
     
     private func createTabBarItem(controller: UIViewController,
                                   title: String,
                                   image: UIImage) -> UIViewController {
         let navigationController = UINavigationController(rootViewController: controller)
+        navigationController.isNavigationBarHidden = true
         let tabBarItem = UITabBarItem(title: title, image: image, selectedImage: nil)
         navigationController.tabBarItem = tabBarItem
         return navigationController

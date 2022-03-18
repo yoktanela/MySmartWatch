@@ -25,7 +25,6 @@ class PeripheralViewModel: NSObject {
     var stepCount = BehaviorRelay<Int?>(value: nil)
     var calorie = BehaviorRelay<Int?>(value: nil)
     var distance = BehaviorRelay<Double?>(value: nil)
-    var battery = BehaviorRelay<Int?>(value: nil)
     
     init(bluetoothService: BluetoothService, peripheral: CBPeripheral) {
         super.init()
@@ -110,8 +109,6 @@ class PeripheralViewModel: NSObject {
                 let dataObs = self.bluetoothService.setNotify(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.stepCountCharacteristicUUID).compactMap{$0}
                 let stepInfo = dataObs
                     .filter {String($0.hexEncodedString().prefix(2)).isEqual(to: "DE")}
-                let deviceInfo = dataObs
-                    .filter {String($0.hexEncodedString().prefix(2)).isEqual(to: "00")}
                     
                 stepInfo.flatMap { data -> Observable<Int?> in
                     return .just(data.toInt(startIndex: 16, offset: 8))
@@ -132,14 +129,8 @@ class PeripheralViewModel: NSObject {
                     .drive(self.distance)
                     .disposed(by: self.disposeBag)
                 
-                deviceInfo.flatMap { data -> Observable<Int?> in
-                    return .just(data.toInt(startIndex: 34, offset: 4))
-                }.asDriver(onErrorJustReturn: nil)
-                    .drive(self.battery)
-                    .disposed(by: self.disposeBag)
-                
             } else {
-                // try to connect again
+                //
             }
         })
     }
