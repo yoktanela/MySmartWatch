@@ -116,7 +116,7 @@ class BluetoothService {
             .compactMap{$0}
             .subscribe(onNext: { characteristic in
                 peripheral.setNotifyValue(true, for: characteristic)
-            })
+            }).disposed(by: disposeBag)
         
         let characteristic = peripheral.rx.didUpdateValue
             .flatMap { characteristic -> Observable<CBCharacteristic?> in

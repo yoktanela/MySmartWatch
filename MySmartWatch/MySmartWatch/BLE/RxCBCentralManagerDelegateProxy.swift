@@ -10,7 +10,6 @@ import CoreBluetooth
 import RxSwift
 import RxCocoa
 
-
 extension CBCentralManager: HasDelegate {}
 
 class RxCBCentralManagerDelegateProxy: DelegateProxy<CBCentralManager, CBCentralManagerDelegate>, DelegateProxyType, CBCentralManagerDelegate {
@@ -39,6 +38,19 @@ public extension Reactive where Base: CBCentralManager {
         RxCBCentralManagerDelegateProxy.proxy(for: base)
     }
     
+    var stateChanged: Observable<CBManagerState> {
+        return RxCBCentralManagerDelegateProxy.proxy(for: base).state
+    }
+    
+    var connectedPeripheral: Observable<CBPeripheral> {
+        let selector = #selector(CBCentralManagerDelegate
+                                    .centralManager(_:didConnect:))
+        return delegate.methodInvoked(selector)
+            .compactMap { parameters in
+                return parameters[1] as? CBPeripheral
+            }
+    }
+    
     var didDiscoverPeripheral: Observable<Peripheral> {
         let selector = #selector(CBCentralManagerDelegate
                                     .centralManager(_:didDiscover:advertisementData:rssi:))
@@ -50,19 +62,6 @@ public extension Reactive where Base: CBCentralManager {
                     return nil
                 }
                 return Peripheral(peripheral: peripheral, advertisementData: advertisementData, rssi: rssi)
-            }
-    }
-    
-    var stateChanged: Observable<CBManagerState> {
-        return RxCBCentralManagerDelegateProxy.proxy(for: base).state
-    }
-    
-    var connectedPeripheral: Observable<CBPeripheral> {
-        let selector = #selector(CBCentralManagerDelegate
-                                    .centralManager(_:didConnect:))
-        return delegate.methodInvoked(selector)
-            .compactMap { parameters in
-                return parameters[1] as? CBPeripheral
             }
     }
 }
