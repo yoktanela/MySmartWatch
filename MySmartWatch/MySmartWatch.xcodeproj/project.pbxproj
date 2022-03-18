@@ -26,6 +26,8 @@
 		5489F90927E3938F00DC019D /* AddAlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F90827E3938F00DC019D /* AddAlarmViewController.swift */; };
 		5489F90B27E3CAAE00DC019D /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F90A27E3CAAE00DC019D /* Alarm.swift */; };
 		5489F90F27E3D83100DC019D /* AlarmViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F90E27E3D83100DC019D /* AlarmViewCell.swift */; };
+		5489F91127E3EA7800DC019D /* DayViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F91027E3EA7800DC019D /* DayViewCell.swift */; };
+		5489F91327E3FBE100DC019D /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5489F91227E3FBE100DC019D /* SettingsViewModel.swift */; };
 		54DDDFC027AA683E00AF7248 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFBF27AA683E00AF7248 /* AppDelegate.swift */; };
 		54DDDFC227AA683E00AF7248 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFC127AA683E00AF7248 /* SceneDelegate.swift */; };
 		54DDDFC427AA683E00AF7248 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DDDFC327AA683E00AF7248 /* ViewController.swift */; };
@@ -87,6 +89,8 @@
 		5489F90827E3938F00DC019D /* AddAlarmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAlarmViewController.swift; sourceTree = "<group>"; };
 		5489F90A27E3CAAE00DC019D /* Alarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
 		5489F90E27E3D83100DC019D /* AlarmViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmViewCell.swift; sourceTree = "<group>"; };
+		5489F91027E3EA7800DC019D /* DayViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayViewCell.swift; sourceTree = "<group>"; };
+		5489F91227E3FBE100DC019D /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		54DDDFBC27AA683E00AF7248 /* MySmartWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MySmartWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54DDDFBF27AA683E00AF7248 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		54DDDFC127AA683E00AF7248 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -260,6 +264,7 @@
 				5489F8FA27E23C3C00DC019D /* SettingView.swift */,
 				5489F8FC27E2AFA300DC019D /* DeviceInfoView.swift */,
 				5489F90E27E3D83100DC019D /* AlarmViewCell.swift */,
+				5489F91027E3EA7800DC019D /* DayViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -269,6 +274,7 @@
 			children = (
 				54DDE00427B3D04600AF7248 /* ScannerViewModel.swift */,
 				540AEC4027C530B700EC3851 /* PeripheralViewModel.swift */,
+				5489F91227E3FBE100DC019D /* SettingsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -541,6 +547,7 @@
 				540AEC4127C530B700EC3851 /* PeripheralViewModel.swift in Sources */,
 				540AEC3F27C506DB00EC3851 /* UITabBar.swift in Sources */,
 				54DDDFF427AAA15B00AF7248 /* Constants.swift in Sources */,
+				5489F91127E3EA7800DC019D /* DayViewCell.swift in Sources */,
 				54DDDFF627AAA29900AF7248 /* BehaviorRelayExtension.swift in Sources */,
 				540AEC4527C98A5300EC3851 /* BluetoothService.swift in Sources */,
 				54DDDFFC27AB1F5F00AF7248 /* PeripheralViewCell.swift in Sources */,
@@ -549,6 +556,7 @@
 				54EDFA0827C00D480017FB6E /* HeartRateViewController.swift in Sources */,
 				540AEC4A27C99C5E00EC3851 /* Peripheral.swift in Sources */,
 				5489F8EF27D77CA600DC019D /* DataExtension.swift in Sources */,
+				5489F91327E3FBE100DC019D /* SettingsViewModel.swift in Sources */,
 				54DDDFF927AB1E8600AF7248 /* HeartRatePeripheral.swift in Sources */,
 				54DDDFFE27AB1F8E00AF7248 /* UIColor+HexValue.swift in Sources */,
 				54DDE00527B3D04600AF7248 /* ScannerViewModel.swift in Sources */,

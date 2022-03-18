@@ -9,10 +9,11 @@ import Foundation
 import UIKit
 import RxSwift
 import RxCocoa
+import CoreBluetooth
 
 class SettingsViewController: UIViewController {
     
-    var peripheralViewModel: PeripheralViewModel!
+    var settingViewModel: SettingsViewModel!
     private var disposeBag = DisposeBag()
     
     var deviceInfoView: DeviceInfoView = {
@@ -30,8 +31,8 @@ class SettingsViewController: UIViewController {
         return view
     }()
     
-    init(peripheralViewModel: PeripheralViewModel) {
-        self.peripheralViewModel = peripheralViewModel
+    init(bluetoothService: BluetoothService, peripheral: CBPeripheral) {
+        self.settingViewModel = SettingsViewModel(bluetoothService: bluetoothService, peripheral: peripheral)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -49,7 +50,7 @@ class SettingsViewController: UIViewController {
     
     func setSubViews() {
         
-        if let deviceName = self.peripheralViewModel?.getDeviceName() {
+        if let deviceName = self.settingViewModel?.getDeviceName() {
             deviceInfoView.setDeviceName(name: deviceName)
         }
         
@@ -76,7 +77,7 @@ class SettingsViewController: UIViewController {
     }
     
     func bindUI() {
-        peripheralViewModel.battery
+        settingViewModel.battery
             .compactMap{$0}
             .flatMap { value -> Observable<String> in
                 return .just("\(String(value))%")
@@ -86,13 +87,13 @@ class SettingsViewController: UIViewController {
         
         findDeviceSetting.rx.controlEvent(.touchUpInside)
             .subscribe(onNext: {
-                self.peripheralViewModel.vibrateDevice()
+                self.settingViewModel.vibrateDevice()
             })
             .disposed(by: disposeBag)
         
         alarmSettingView.rx.controlEvent(.touchUpInside)
             .subscribe(onNext: {
-                let alarmVC = AlarmClockViewController(peripheralViewModel: self.peripheralViewModel)
+                let alarmVC = AlarmClockViewController(settingViewModel: self.settingViewModel)
                 let navigationController = UINavigationController(rootViewController: alarmVC)
                 alarmVC.navigationItem.title = "Alarm Clock"
                 self.present(navigationController, animated: true, completion: nil)

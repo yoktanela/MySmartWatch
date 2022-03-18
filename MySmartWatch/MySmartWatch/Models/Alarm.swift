@@ -15,6 +15,33 @@ enum Day: Int {
     case thursday = 16
     case friday = 32
     case saturday = 64
+    
+    static func getDays() -> [Day] {
+        return [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
+    }
+    
+    static func getWeekEndDays() -> [Day] {
+        return [.saturday, .sunday]
+    }
+    
+    func getName() -> String {
+        switch self {
+        case .sunday:
+            return "Sunday"
+        case .monday:
+            return "Monday"
+        case .tuesday:
+            return "Tuesday"
+        case .wednesday:
+            return "Wednesday"
+        case .thursday:
+            return "Thursday"
+        case .friday:
+            return "Friday"
+        case .saturday:
+            return "Saturday"
+        }
+    }
 }
 
 class Alarm : Equatable {
@@ -35,6 +62,27 @@ class Alarm : Equatable {
     
     func getAlarmString() -> String {
         return "\(String(format: "%02d", hour)):\(String(format: "%02d", minute))"
+    }
+    
+    func getRepeatDaysString() -> String {
+        if repeatDays.count == 0 {
+            return "No repeat"
+        } else if repeatDays.count == 7 {
+            return "All week"
+        } else if repeatDays.count == 5 && !repeatDays.contains(where: {Day.getWeekEndDays().contains($0)}){
+            return "Workdays"
+        } else if repeatDays.count == 2 && repeatDays.contains(where: {Day.getWeekEndDays().contains($0)}){
+            return "Weekends"
+        } else {
+            var text = ""
+            for index in 0..<repeatDays.count {
+                text += repeatDays[index].getName()
+                if index < repeatDays.count-1 {
+                    text += ", "
+                }
+            }
+            return text
+        }
     }
 }
 

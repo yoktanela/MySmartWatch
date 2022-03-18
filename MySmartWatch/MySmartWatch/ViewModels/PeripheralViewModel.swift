@@ -25,10 +25,6 @@ class PeripheralViewModel: NSObject {
     var stepCount = BehaviorRelay<Int?>(value: nil)
     var calorie = BehaviorRelay<Int?>(value: nil)
     var distance = BehaviorRelay<Double?>(value: nil)
-    var battery = BehaviorRelay<Int?>(value: nil)
-    
-    var alarms = BehaviorRelay<[Alarm]>(value: [])
-    var maxAlarmCount = 5
     
     init(bluetoothService: BluetoothService, peripheral: CBPeripheral) {
         super.init()
@@ -113,8 +109,6 @@ class PeripheralViewModel: NSObject {
                 let dataObs = self.bluetoothService.setNotify(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.stepCountCharacteristicUUID).compactMap{$0}
                 let stepInfo = dataObs
                     .filter {String($0.hexEncodedString().prefix(2)).isEqual(to: "DE")}
-                let deviceInfo = dataObs
-                    .filter {String($0.hexEncodedString().prefix(2)).isEqual(to: "00")}
                     
                 stepInfo.flatMap { data -> Observable<Int?> in
                     return .just(data.toInt(startIndex: 16, offset: 8))
@@ -135,48 +129,9 @@ class PeripheralViewModel: NSObject {
                     .drive(self.distance)
                     .disposed(by: self.disposeBag)
                 
-                deviceInfo.flatMap { data -> Observable<Int?> in
-                    return .just(data.toInt(startIndex: 34, offset: 4))
-                }.asDriver(onErrorJustReturn: nil)
-                    .drive(self.battery)
-                    .disposed(by: self.disposeBag)
-                
             } else {
-                // try to connect again
+                //
             }
         })
-        
-        // alarms
-        self.alarms
-            .skip(1)
-            .subscribe(onNext: { alarms in
-                var str = "BE0109FE"
-                let count = pow(2.0, alarms.count)-1
-                str += String(format:"%02X", NSDecimalNumber(decimal: count).intValue)
-                alarms.forEach { alarm in
-                    var repeats = 0
-                    alarm.repeatDays.forEach({ repeats += $0.rawValue})
-                    str += String(format:"%02X", alarm.hour)
-                    str += String(format:"%02X", alarm.minute)
-                    str += String(format:"%02X", repeats)
-                }
-                self.bluetoothService.writeValue(for: self.peripheral,
-                                                    serviceUUID: Constants.primaryServiceUUID,
-                                                    characteristicUUID: Constants.primaryCharacteristicUUID,
-                                                    data: str.toData())
-            }).disposed(by: disposeBag)
-    }
-    
-    func getDeviceName() -> String? {
-        return peripheral.name
-    }
-    
-    func vibrateDevice() {
-        self.bluetoothService.writeValue(for: self.peripheral, serviceUUID: Constants.primaryServiceUUID, characteristicUUID: Constants.primaryCharacteristicUUID, data: "BE060FED".toData())
-    }
-    
-    func addAlarm(hour: Int, minute: Int, repeatDays: [Day]) {
-        let alarm = Alarm(hour: hour, minute: minute, repeatDays: repeatDays)
-        self.alarms.add(element: alarm)
     }
 }

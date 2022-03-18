@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-
 class AlarmViewCell: UITableViewCell {
     
     public let containerView: UIView = {
@@ -72,6 +71,6 @@ class AlarmViewCell: UITableViewCell {
     func customizeCell(alarm: Alarm) {
         selectionStyle = UITableViewCell.SelectionStyle.none
         self.alarmTimeLabel.text = alarm.getAlarmString()
-        self.repeatDaysLabel.text = "No repeat"
+        self.repeatDaysLabel.text = alarm.getRepeatDaysString()
     }
 }

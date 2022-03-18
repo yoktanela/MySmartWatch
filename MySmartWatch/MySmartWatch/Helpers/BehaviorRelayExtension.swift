@@ -21,4 +21,12 @@ extension BehaviorRelay where Element: RangeReplaceableCollection, Element.Eleme
         }
         self.accept(array)
     }
+    
+    func remove(element: Element.Element) {
+        var array = self.value
+        if let firstIndex = array.firstIndex(where: {$0 == element}) {
+            array.remove(at: firstIndex)
+        }
+        self.accept(array)
+    }
 }

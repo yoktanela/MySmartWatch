@@ -12,7 +12,7 @@ import RxCocoa
 
 class AlarmClockViewController: UIViewController {
     
-    var peripheralViewModel: PeripheralViewModel!
+    var settingViewModel: SettingsViewModel!
     private var disposeBag = DisposeBag()
     
     var alarmTableView: UITableView = {
@@ -21,8 +21,8 @@ class AlarmClockViewController: UIViewController {
         return tableView
     }()
     
-    init(peripheralViewModel: PeripheralViewModel) {
-        self.peripheralViewModel = peripheralViewModel
+    init(settingViewModel: SettingsViewModel) {
+        self.settingViewModel = settingViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -65,7 +65,7 @@ class AlarmClockViewController: UIViewController {
     
     func bindUI() {
         
-        self.peripheralViewModel
+        self.settingViewModel
             .alarms
             .observe(on: MainScheduler.instance)
             .bind(to: self.alarmTableView.rx.items) { (tableView, row, element ) in
@@ -75,10 +75,10 @@ class AlarmClockViewController: UIViewController {
             }.disposed(by: disposeBag)
         
         if let rightBarItem = self.navigationItem.rightBarButtonItem {
-            self.peripheralViewModel
+            self.settingViewModel
                 .alarms
                 .flatMap { alarms -> Observable<Bool> in
-                    return .just(alarms.count < self.peripheralViewModel.maxAlarmCount)
+                    return .just(alarms.count < self.settingViewModel.maxAlarmCount)
                 }
                 .asDriver(onErrorDriveWith: .just(false))
                 .drive(rightBarItem.rx.isEnabled)
@@ -91,7 +91,7 @@ class AlarmClockViewController: UIViewController {
     }
     
     @objc func addAlarm(sender: UIBarButtonItem) {
-        let addAlarmVC = AddAlarmViewController(peripheralViewModel: peripheralViewModel)
+        let addAlarmVC = AddAlarmViewController(settingsViewModel: settingViewModel)
         let navController = UINavigationController(rootViewController: addAlarmVC)
         self.present(navController, animated: true, completion: nil)
     }

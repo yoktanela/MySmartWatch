@@ -62,6 +62,7 @@ class BluetoothService {
         return self.getService(for: peripheral, serviceUUID: serviceUUID)
             .observe(on: MainScheduler.instance)
             .compactMap{$0}
+            .take(1)
             .flatMap { service -> Observable<CBCharacteristic?> in
                 if let characteristic = service.characteristics?
                     .first(where: {$0.uuid.uuidString.isEqual(to: characteristicUUID)}) {
@@ -108,8 +109,10 @@ class BluetoothService {
         getCharacteristic(for: peripheral, serviceUUID: serviceUUID, characteristicUUID: characteristicUUID)
             .observe(on: MainScheduler.instance)
             .compactMap{$0}
+            .take(1)
             .subscribe(onNext: { characteristic in
                 peripheral.writeValue(data, for: characteristic, type: .withResponse)
+                
             })
             .disposed(by: disposeBag)
         }
