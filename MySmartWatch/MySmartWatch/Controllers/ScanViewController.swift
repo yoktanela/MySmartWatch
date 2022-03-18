@@ -75,6 +75,19 @@ class ScanViewController: UIViewController {
     
     private func bindUI() {
         self.scannerViewModel
+            .warningMessage
+            .compactMap{$0}
+            .subscribe(onNext: { message in
+                let alertController = UIAlertController(title: "Warning", message: message, preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) {
+                                    UIAlertAction in
+                                }
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            })
+            .disposed(by: disposeBag)
+        
+        self.scannerViewModel
             .getPeripherals(for: Constants.heartRatePeripheralServiceUUID)
             .observe(on: MainScheduler.instance)
             .bind(to: self.peripheralTableView.rx.items) { (tableView, row, element ) in

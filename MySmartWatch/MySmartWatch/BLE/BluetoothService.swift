@@ -16,16 +16,46 @@ class BluetoothService {
     var timerForScan = Timer()
     var scanning = BehaviorRelay<Bool>(value: false)
     private var disposeBag = DisposeBag()
+    let state: BehaviorRelay<CBManagerState>
+    let warningMessage = BehaviorRelay<String?>(value: nil)
+    
+    init() {
+        state = BehaviorRelay<CBManagerState>(value: centralManager.state)
+        self.centralManager.rx
+            .stateChanged
+            .observe(on: MainScheduler.instance)
+            .bind(to: state)
+            .disposed(by: disposeBag)
+        
+        self.state
+            .flatMap { state -> Observable<String?> in
+                if state == .unauthorized {
+                    return .just("Bluetooth permission is required. Please give permission from Settings")
+                }
+                return .just(nil)
+            }.compactMap{$0}
+            .asDriver(onErrorJustReturn: nil)
+            .drive(warningMessage)
+            .disposed(by: disposeBag)
+    }
     
     public func startScanning(for uuidString: String) -> Observable<Peripheral> {
-        scanning.accept(true)
-        DispatchQueue.main.async {
-            self.timerForScan = Timer.scheduledTimer(withTimeInterval: TimeInterval(0.1), repeats: true) { _ in
-                self.centralManager.stopScan()
-                self.centralManager.scanForPeripherals(withServices: [CBUUID(string: uuidString)])
-            }
-            self.timerForScan.fire()
-        }
+        self.state
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { state in
+                if state == CBManagerState.poweredOn {
+                    self.scanning.accept(true)
+                    DispatchQueue.main.async {
+                        self.timerForScan = Timer.scheduledTimer(withTimeInterval: TimeInterval(0.1), repeats: true) { _ in
+                            self.centralManager.stopScan()
+                            self.centralManager.scanForPeripherals(withServices: [CBUUID(string: uuidString)])
+                        }
+                        self.timerForScan.fire()
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
+        
         return centralManager.rx.didDiscoverPeripheral
     }
     

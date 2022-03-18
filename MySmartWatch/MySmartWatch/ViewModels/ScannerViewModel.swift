@@ -26,9 +26,11 @@ class ScannerViewModel {
     var scanning: BehaviorRelay<Bool> {
         return bluetoothService.scanning
     }
+    var warningMessage = BehaviorRelay<String?>(value: nil)
     
     init(bluetoothService: BluetoothService) {
         self.bluetoothService = bluetoothService
+        self.warningMessage = bluetoothService.warningMessage
     }
     
     func getPeripherals(for uuidString: String) -> BehaviorRelay<[HeartRatePeripheral]> {

@@ -16,7 +16,8 @@ extension CBCentralManager: HasDelegate {}
 class RxCBCentralManagerDelegateProxy: DelegateProxy<CBCentralManager, CBCentralManagerDelegate>, DelegateProxyType, CBCentralManagerDelegate {
 
     weak public private(set) var centralManager: CBCentralManager?
-
+    let state = PublishSubject<CBManagerState>()
+    
     public init(centralManager: ParentObject) {
         self.centralManager = centralManager
         super.init(parentObject: centralManager,
@@ -28,7 +29,8 @@ class RxCBCentralManagerDelegateProxy: DelegateProxy<CBCentralManager, CBCentral
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        
+        state.on(.next(central.state))
+        self._forwardToDelegate?.centralManagerDidUpdateState?(central)
     }
 }
 
@@ -52,11 +54,7 @@ public extension Reactive where Base: CBCentralManager {
     }
     
     var stateChanged: Observable<CBManagerState> {
-        let selector = #selector(CBCentralManagerDelegate.centralManagerDidUpdateState(_:))
-        return delegate.methodInvoked(selector)
-            .compactMap { parameters -> CBManagerState? in
-                return (parameters[0] as? CBCentralManager)?.state ?? nil
-            }
+        return RxCBCentralManagerDelegateProxy.proxy(for: base).state
     }
     
     var connectedPeripheral: Observable<CBPeripheral> {
